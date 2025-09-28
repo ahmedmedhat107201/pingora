@@ -8,4 +8,10 @@ class AssetData {
   static const camera = "assets/images/general_icons/camera.svg";
   static const calendar = "assets/images/general_icons/calendar.svg";
   static const notification = "assets/images/general_icons/notification.svg";
+  static const appIconLogo = "assets/images/general_icons/app_icon_logo.png";
+  static const appLogo = "assets/images/general_icons/app_logo.png";
+
+  //Auth Icons
+  static const view = "assets/images/auth_icons/view.svg";
+  static const viewOff = "assets/images/auth_icons/view-off.svg";
 }

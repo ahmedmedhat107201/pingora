@@ -237,5 +237,12 @@
   "trip_confirmation_error": "Problem occurred while confirming trip",
   "language": "Language",
   "select_language": "Select Language",
-  "changing_language": "Changing language..."
+  "changing_language": "Changing language...",
+  "welcome_to": "Welcome To",
+  "app_name": "Pingora",
+  "loading": "Loading...",
+  "splash_welcome_message": "Get ready for an amazing experience!",
+  "welcome_back_message": "Welcome back! Please sign in to continue.",
+  "enter_email_placeholder": "Enter your email address",
+  "enter_password_placeholder": "Enter your password"
 }

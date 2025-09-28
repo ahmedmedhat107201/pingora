@@ -237,5 +237,12 @@
   "trip_confirmation_error": "حدثت مشكلة أثناء تأكيد الرحلة",
   "language": "اللغة",
   "select_language": "اختر اللغة",
-  "changing_language": "جاري تغيير اللغة..."
+  "changing_language": "جاري تغيير اللغة...",
+  "welcome_to": "مرحباً بك في",
+  "app_name": "Pingora",
+  "loading": "جاري التحميل...",
+  "splash_welcome_message": "استعد لتجربة رائعة!",
+  "welcome_back_message": "أهلاً بعودتك! يرجى تسجيل الدخول للمتابعة.",
+  "enter_email_placeholder": "أدخل عنوان بريدك الإلكتروني",
+  "enter_password_placeholder": "أدخل كلمة المرور"
 }

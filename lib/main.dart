@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/features/splash/presentation/view/splash_view.dart';
 import 'core/utils/router/router_helper.dart';
 import 'core/utils/services/local_services/cache_helper.dart';
 import 'core/utils/services/remote_services/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/shared/shared_cubits/theme_cubit/theme_cubit.dart';
 import 'core/shared/theme/app_theme.dart';
-import 'features/theme_example/example_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
-                home: ThemeExamplePage(),
+                home: SplashView(),
               );
             },
           ),
