@@ -1,0 +1,65 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'core/utils/router/router_helper.dart';
+import 'core/utils/services/local_services/cache_helper.dart';
+import 'core/utils/services/remote_services/service_locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/shared/shared_cubits/theme_cubit/theme_cubit.dart';
+import 'core/shared/theme/app_theme.dart';
+import 'features/theme_example/example_page.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
+  await CacheHelper.init();
+  setup();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale("ar"), Locale("en")],
+      saveLocale: true,
+      path: 'assets/translations',
+      startLocale: const Locale("ar"),
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+          ],
+          child: BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, state) {
+              return MaterialApp(
+                navigatorKey: navigatorKey,
+                title: 'Pingora',
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                home: ThemeExamplePage(),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}

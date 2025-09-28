@@ -1,0 +1,66 @@
+name: pingora
+description: "A new Flutter project."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  bloc: ^9.0.0
+  cached_network_image: ^3.4.1
+  cupertino_icons: ^1.0.8
+  dio: ^5.8.0+1
+  dotted_border: ^3.1.0
+  dropdown_button2: ^2.3.9
+  easy_localization: ^3.0.8
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_image_compress: ^2.4.0
+  flutter_rating: ^2.0.2
+  flutter_screenutil: ^5.9.3
+  flutter_spinkit: ^5.2.1
+  flutter_svg: ^2.2.0
+  fluttertoast: ^8.2.12
+  get_it: ^8.0.3
+  image_picker: ^1.1.2
+  intl: ^0.20.2
+  oktoast: ^3.4.0
+  onesignal_flutter: ^5.3.4
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  shared_preferences: ^2.5.3
+  shimmer: ^3.0.0
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  change_app_package_name: ^1.4.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/translations/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+    
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri-Bold.ttf
+        - asset: assets/fonts/Amiri-BoldItalic.ttf
+        - asset: assets/fonts/Amiri-Italic.ttf
+        - asset: assets/fonts/Cairo-ExtraBold.ttf
