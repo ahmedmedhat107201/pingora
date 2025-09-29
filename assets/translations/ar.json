@@ -255,5 +255,8 @@
   "accept_terms_message": "يرجى قبول الشروط والأحكام للمتابعة",
   "i_agree_to": "أوافق على",
   "terms_conditions": "الشروط والأحكام",
-  "already_have_account": "لديك حساب بالفعل؟"
+  "already_have_account": "لديك حساب بالفعل؟",
+  "exit_app_title": "إغلاق التطبيق",
+  "exit_app_message": "هل أنت متأكد من أنك تريد إغلاق التطبيق؟",
+  "ok": "حسناً"
 }

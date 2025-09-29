@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import '../../../constants.dart';
+import 'package:pingora/constants.dart';
+import 'package:pingora/core/shared/theme/app_theme.dart';
 
 class EmptyWidget extends StatelessWidget {
   const EmptyWidget({
     super.key,
-    required this.icon,
+    required this.image,
     required this.title,
     required this.description,
   });
-  final String icon;
+  final String image;
   final String title;
   final String description;
   @override
@@ -19,29 +19,27 @@ class EmptyWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              icon,
-              width: MediaQuery.of(context).size.width * .62,
-            ),
-            SizedBox(height: AppConstants.height30(context) * 3),
+            SizedBox(height: AppConstants.height30(context) * 2),
+            Image.asset(image, width: MediaQuery.of(context).size.width * .62),
+            SizedBox(height: AppConstants.height30(context)),
             Text(
               title,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: MediaQuery.of(context).size.height * .026,
                 fontFamily: "Cairo",
-                color: const Color(0xff141414),
+                color: context.primaryTextColor,
               ),
             ),
-            SizedBox(height: AppConstants.height5(context)),
+            SizedBox(height: AppConstants.height10(context)),
             Text(
               description,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: MediaQuery.of(context).size.height * .018,
+                fontSize: MediaQuery.of(context).size.height * .020,
                 fontFamily: "Cairo",
-                color: const Color(0xff5F7983),
+                color: context.secondaryTextColor,
               ),
             ),
           ],

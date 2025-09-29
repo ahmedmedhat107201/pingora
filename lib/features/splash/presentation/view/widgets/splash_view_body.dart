@@ -18,7 +18,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   void initState() {
     super.initState();
-    setUpSplash().then((value) => MagicRouter.navigateTo(LoginView()));
+    setUpSplash().then((value) => MagicRouter.navigateAndPopAll(LoginView()));
   }
 
   setUpSplash() async {

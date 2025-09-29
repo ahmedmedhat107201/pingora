@@ -9,7 +9,7 @@ class SplashView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.backgroundColor,
-      body: SplashViewBody(),
+      body: PopScope(canPop: false, child: SplashViewBody()),
     );
   }
 }

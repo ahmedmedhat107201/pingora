@@ -10,7 +10,6 @@ class AppTheme {
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
       fontFamily: context.locale.languageCode == 'ar' ? 'Cairo' : 'Roboto',
-
       brightness: Brightness.light,
       primarySwatch: AppColors.primaryColor,
       primaryColor: AppColors.primarySwatchColor,

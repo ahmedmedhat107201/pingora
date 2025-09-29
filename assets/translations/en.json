@@ -255,5 +255,8 @@
   "accept_terms_message": "Please accept terms and conditions to continue",
   "i_agree_to": "I agree to the",
   "terms_conditions": "Terms & Conditions",
-  "already_have_account": "Already have an account?"
+  "already_have_account": "Already have an account?",
+  "exit_app_title": "Exit App",
+  "exit_app_message": "Are you sure you want to exit the app?",
+  "ok": "OK"
 }
