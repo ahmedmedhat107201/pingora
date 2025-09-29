@@ -1,7 +1,8 @@
 class EndPoints {
   static const baseUrl = "";
 
-  //general Endpoints
-
-  static const refreshToken = "/auth";
+  //auth endpoints
+  static const login = "/auth/login";
+  static const signUp = "/auth/register";
+  static const logout = "/auth/logout";
 }

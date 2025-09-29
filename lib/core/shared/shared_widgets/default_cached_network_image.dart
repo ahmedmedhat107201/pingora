@@ -8,11 +8,13 @@ class DefaultCachedNetworkImage extends StatelessWidget {
   final double imageWidth;
   final double imageHeight;
   final BoxFit? fit;
+  final Widget? errorWidget;
   const DefaultCachedNetworkImage({
     super.key,
     required this.imageUrl,
     required this.imageHeight,
     required this.imageWidth,
+    this.errorWidget,
     this.fit,
   });
 
@@ -32,7 +34,7 @@ class DefaultCachedNetworkImage extends StatelessWidget {
         ),
       ),
       errorWidget: (context, url, error) =>
-          Image.asset(AssetData.noImage, fit: BoxFit.scaleDown),
+          errorWidget ?? Image.asset(AssetData.noImage, fit: BoxFit.scaleDown),
       fit: fit ?? BoxFit.cover,
     );
   }

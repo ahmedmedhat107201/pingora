@@ -97,6 +97,28 @@ class ApiService {
     return response;
   }
 
+  Future<Response> patchData({
+    required String endPoint,
+    dynamic data,
+    bool sendToken = true,
+    Map<String, dynamic>? query,
+  }) async {
+    _dio.options.headers = {
+      "accept": "*/*",
+      "Content-Type": "application/json",
+
+      if (sendToken)
+        "Authorization": "Bearer ${CacheKeysManger.getAccessToken()}",
+      "lang": CacheKeysManger.getUserLanguageFromCache(),
+    };
+    var response = await _dio.patch(
+      '${EndPoints.baseUrl}$endPoint',
+      data: data,
+      queryParameters: query,
+    );
+    return response;
+  }
+
   Future<Response> deleteData({
     required String endPoint,
     bool sendToken = true,
