@@ -49,29 +49,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Logo
-              Container(
-                width: 140.w,
-                height: 140.h,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(25.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 30.r,
-                      spreadRadius: 0,
-                      offset: Offset(0, 15.h),
-                    ),
-                    BoxShadow(
-                      color: context.primaryColor.withValues(alpha: 0.3),
-                      blurRadius: 20.r,
-                      spreadRadius: 5.r,
-                      offset: Offset(0, 5.h),
-                    ),
-                  ],
-                ),
-                child: Image.asset(AssetData.appLogo, fit: BoxFit.contain),
-              ),
+              Image.asset(AssetData.appLogo, fit: BoxFit.contain),
 
               SizedBox(height: 40.h),
 

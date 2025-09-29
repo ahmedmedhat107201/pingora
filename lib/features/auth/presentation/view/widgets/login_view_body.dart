@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pingora/core/utils/helper/field_formatters.dart';
 import '../../../../../core/shared/theme/app_theme.dart';
 import '../../../../../core/shared/shared_widgets/default_text_form_field.dart';
 import '../../../../../core/shared/shared_widgets/custom_button.dart';
@@ -25,26 +26,6 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'email_required'.tr();
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'email_invalid'.tr();
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'password_required'.tr();
-    }
-    if (value.length < 8) {
-      return 'password_min_length'.tr();
-    }
-    return null;
   }
 
   void _handleLogin() {
@@ -91,36 +72,16 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               children: [
                 SizedBox(height: 60.h),
 
-                // Logo Section
-                Center(
-                  child: Container(
-                    width: 120.w,
-                    height: 120.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: context.greyColor.withOpacity(0.1),
-                          blurRadius: 20.r,
-                          spreadRadius: 5.r,
-                          offset: Offset(0, 5.h),
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.all(20.w),
-                    child: Image.asset(AssetData.appLogo, fit: BoxFit.contain),
-                  ),
-                ),
+                Image.asset(AssetData.appLogo, fit: BoxFit.contain),
 
-                SizedBox(height: 40.h),
+                SizedBox(height: 24.h),
 
                 // Welcome Text
                 Text(
                   'login'.tr(),
                   style: Styles.cairo36700Secondary(
                     context,
-                  ).copyWith(fontSize: 32.sp, color: context.primaryTextColor),
+                  ).copyWith(fontSize: 32.sp, color: context.primaryColor),
                   textAlign: TextAlign.center,
                 ),
 
@@ -141,14 +102,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 DefaultTextFormField(
                   controller: _emailController,
                   textInputType: TextInputType.emailAddress,
-                  labelText: 'email'.tr(),
                   hintText: 'enter_email_placeholder'.tr(),
                   prefixIcon: Icon(
                     Icons.email_outlined,
                     color: context.greyColor,
                     size: 24.sp,
                   ),
-                  validation: _validateEmail,
+                  validation: FieldFormatters.validateEmail,
                   fillColor: context.inputBackgroundColor,
                   borderSideColor: context.borderColor,
                   borderSideEnabledColor: context.borderColor,
@@ -164,18 +124,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 DefaultTextFormField(
                   controller: _passwordController,
                   textInputType: TextInputType.visiblePassword,
+                  maxLines: 1,
                   isPassword: true,
                   passwordActiveIcon: AssetData.viewOff,
                   passwordIcon: AssetData.view,
-
-                  labelText: 'password'.tr(),
                   hintText: 'enter_password_placeholder'.tr(),
                   prefixIcon: Icon(
                     Icons.lock_outline,
                     color: context.greyColor,
                     size: 24.sp,
                   ),
-                  validation: _validatePassword,
+                  validation: FieldFormatters.validatePassword,
                   fillColor: context.inputBackgroundColor,
                   borderSideColor: context.borderColor,
                   borderSideEnabledColor: context.borderColor,

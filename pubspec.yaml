@@ -16,6 +16,7 @@ dependencies:
   dotted_border: ^3.1.0
   dropdown_button2: ^2.3.9
   easy_localization: ^3.0.8
+  email_validator: ^3.0.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -38,10 +39,9 @@ dependencies:
   url_launcher: ^6.3.2
 
 dev_dependencies:
+  change_app_package_name: ^1.4.0
   flutter_test:
     sdk: flutter
-  
-  change_app_package_name: ^1.4.0
 
 flutter:
   uses-material-design: true
@@ -58,7 +58,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Cairo.ttf
         - asset: assets/fonts/Cairo-Bold.ttf
-    
+
     - family: Amiri
       fonts:
         - asset: assets/fonts/Amiri-Regular.ttf
