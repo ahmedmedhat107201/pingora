@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,8 +7,10 @@ import '../shared_cubits/theme_cubit/theme_cubit.dart';
 
 class AppTheme {
   // Create ThemeData for light mode
-  static ThemeData get lightTheme {
+  static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
+      fontFamily: context.locale.languageCode == 'ar' ? 'Cairo' : 'Roboto',
+
       brightness: Brightness.light,
       primarySwatch: AppColors.primaryColor,
       primaryColor: AppColors.primarySwatchColor,
@@ -34,8 +37,9 @@ class AppTheme {
   }
 
   // Create ThemeData for dark mode
-  static ThemeData get darkTheme {
+  static ThemeData darkTheme(BuildContext context) {
     return ThemeData(
+      fontFamily: context.locale.languageCode == 'ar' ? 'Cairo' : 'Roboto',
       brightness: Brightness.dark,
       primarySwatch: AppColors.primaryColor,
       primaryColor: AppColors.primarySwatchColor,

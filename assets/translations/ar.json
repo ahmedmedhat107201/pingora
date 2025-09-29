@@ -244,5 +244,16 @@
   "splash_welcome_message": "استعد لتجربة رائعة!",
   "welcome_back_message": "أهلاً بعودتك! يرجى تسجيل الدخول للمتابعة.",
   "enter_email_placeholder": "أدخل عنوان بريدك الإلكتروني",
-  "enter_password_placeholder": "أدخل كلمة المرور"
+  "enter_password_placeholder": "أدخل كلمة المرور",
+  "join_us_message": "انضم إلينا وابدأ رحلتك اليوم!",
+  "full_name_placeholder": "أدخل اسمك الكامل",
+  "enter_phone_placeholder": "أدخل رقم هاتفك",
+  "confirm_password_placeholder": "تأكيد كلمة المرور",
+  "name_min_length": "يجب أن يكون الاسم مكون من حرفين على الأقل",
+  "confirm_password_required": "يرجى تأكيد كلمة المرور",
+  "passwords_not_match": "كلمات المرور غير متطابقة",
+  "accept_terms_message": "يرجى قبول الشروط والأحكام للمتابعة",
+  "i_agree_to": "أوافق على",
+  "terms_conditions": "الشروط والأحكام",
+  "already_have_account": "لديك حساب بالفعل؟"
 }

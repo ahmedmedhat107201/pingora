@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pingora/core/utils/helper/field_formatters.dart';
+import 'package:pingora/core/utils/router/router_helper.dart';
+import 'package:pingora/features/auth/presentation/view/sign_up_view.dart';
 import '../../../../../core/shared/theme/app_theme.dart';
 import '../../../../../core/shared/shared_widgets/default_text_form_field.dart';
 import '../../../../../core/shared/shared_widgets/custom_button.dart';
-import '../../../../../core/utils/text_styles/styles.dart';
+import '../../../../../core/shared/shared_widgets/main_text.dart';
 import '../../../../../core/utils/assets/assets.dart';
 
 class LoginViewBody extends StatefulWidget {
@@ -72,27 +74,30 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               children: [
                 SizedBox(height: 60.h),
 
-                Image.asset(AssetData.appLogo, fit: BoxFit.contain),
+                Image.asset(
+                  AssetData.appLogo,
+                  height: 120.h,
+                  fit: BoxFit.contain,
+                ),
 
                 SizedBox(height: 24.h),
 
                 // Welcome Text
-                Text(
+                MainText(
                   'login'.tr(),
-                  style: Styles.cairo36700Secondary(
-                    context,
-                  ).copyWith(fontSize: 32.sp, color: context.primaryColor),
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+                  color: context.secondaryColor,
                   textAlign: TextAlign.center,
                 ),
 
                 SizedBox(height: 8.h),
 
-                Text(
+                MainText(
                   'welcome_back_message'.tr(),
-                  style: Styles.cairo14400Subtitle(context).copyWith(
-                    fontSize: 16.sp,
-                    color: context.secondaryTextColor,
-                  ),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  color: context.secondaryTextColor,
                   textAlign: TextAlign.center,
                 ),
 
@@ -145,30 +150,6 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   onFilledSubmit: (_) => _handleLogin(),
                 ),
 
-                SizedBox(height: 16.h),
-
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle forgot password
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Forgot password clicked'),
-                          backgroundColor: context.greyColor,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'forgot_password'.tr(),
-                      style: Styles.cairo14500C28(
-                        context,
-                      ).copyWith(fontSize: 14.sp, color: context.primaryColor),
-                    ),
-                  ),
-                ),
-
                 SizedBox(height: 30.h),
 
                 // Login Button
@@ -187,33 +168,25 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                 // Sign Up Section
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    MainText(
                       'no_account'.tr(),
-                      style: Styles.cairo14400Subtitle(context).copyWith(
-                        fontSize: 14.sp,
-                        color: context.secondaryTextColor,
-                      ),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: context.secondaryTextColor,
                     ),
-                    SizedBox(width: 5.w),
+                    SizedBox(width: 6.w),
                     TextButton(
                       onPressed: () {
                         // Navigate to sign up
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Navigate to sign up'),
-                            backgroundColor: context.primaryColor,
-                          ),
-                        );
+                        MagicRouter.navigateAndPopAll(SignUpView());
                       },
-                      child: Text(
+                      child: MainText(
                         'sign_up'.tr(),
-                        style: Styles.cairo14500C28(context).copyWith(
-                          fontSize: 14.sp,
-                          color: context.primaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: context.primaryColor,
                       ),
                     ),
                   ],

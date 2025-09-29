@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../constants.dart';
-import '../../utils/colors/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/constants.dart';
+import 'package:pingora/core/utils/colors/colors.dart';
 
 // ignore: must_be_immutable
 class DefaultButton extends StatelessWidget {
   void Function()? onPress;
-  String text;
+  String? text;
   Widget? icon;
   double? borderRadius;
   double? height;
@@ -20,11 +21,12 @@ class DefaultButton extends StatelessWidget {
   double? elevation;
   FontWeight? fontWeight;
   double? width;
+  Widget? child;
 
   DefaultButton({
     super.key,
     required this.onPress,
-    required this.text,
+    this.text,
     this.icon,
     this.borderRadius,
     this.height,
@@ -39,13 +41,14 @@ class DefaultButton extends StatelessWidget {
     this.surfaceTintColor,
     this.fontWeight,
     this.width,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? AppColors.primaryColor,
+        backgroundColor: backgroundColor ?? AppColors.buttonColor,
         surfaceTintColor: surfaceTintColor,
         shadowColor: shadowColor,
         elevation: elevation ?? 3,
@@ -54,36 +57,38 @@ class DefaultButton extends StatelessWidget {
           horizontal: width ?? AppConstants.width30(context),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 0),
-          side: BorderSide(
-            color: hasBorder ? borderColor! : AppColors.primaryColor,
-          ),
+          borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
+          side: hasBorder
+              ? BorderSide(color: borderColor ?? AppColors.primaryColor)
+              : BorderSide.none,
         ),
       ),
       onPressed: onPress,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) ...[icon!],
-          SizedBox(width: AppConstants.width5(context)),
+      child:
+          child ??
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize:
-                      fontSize ?? MediaQuery.of(context).size.height * .018,
-                  fontWeight: fontWeight ?? FontWeight.w500,
-                  color: textColor ?? Colors.white,
-                  fontFamily: "cairo",
-                ),
+              if (icon != null) ...[icon!],
+              SizedBox(width: AppConstants.width5(context)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize:
+                          fontSize ?? MediaQuery.of(context).size.height * .018,
+                      fontWeight: fontWeight ?? FontWeight.w500,
+                      color: textColor ?? Colors.white,
+                      fontFamily: "cairo",
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
     );
   }
 }

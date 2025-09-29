@@ -9,6 +9,8 @@ class AppColors {
   static const Color redColor = Color(0xffC32B43);
   static const Color green = Color(0xff00CF79);
 
+  static const Color buttonColor = primarySwatchColor;
+
   // Light theme colors
   static const Color lightBackground = Color(0xffffffff);
   static const Color lightSurface = Color(0xffF4F6F9);
