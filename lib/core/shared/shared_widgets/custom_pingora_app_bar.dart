@@ -5,7 +5,8 @@ import 'package:pingora/core/shared/shared_widgets/default_cached_network_image.
 import 'package:pingora/core/shared/theme/app_theme.dart';
 import 'package:pingora/core/shared/shared_widgets/main_text.dart';
 
-class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomPingoraAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final String userName;
   final String? userImageUrl;
   final VoidCallback? onUserTap;
@@ -14,7 +15,7 @@ class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final bool hasBackButton;
 
-  const UserProfileAppBar({
+  const CustomPingoraAppBar({
     Key? key,
     required this.userName,
     this.userImageUrl,
@@ -59,17 +60,24 @@ class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: GestureDetector(
                   onTap: onUserTap,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       if (hasBackButton)
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                            size: 24.sp,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                                size: 24.sp,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            SizedBox(width: 12.w),
+                          ],
                         ),
 
                       // User Avatar with Glow Effect

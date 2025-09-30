@@ -5,15 +5,15 @@ import 'package:shimmer/shimmer.dart';
 
 class DefaultCachedNetworkImage extends StatelessWidget {
   final String imageUrl;
-  final double imageWidth;
-  final double imageHeight;
+  final double? imageWidth;
+  final double? imageHeight;
   final BoxFit? fit;
   final Widget? errorWidget;
   const DefaultCachedNetworkImage({
     super.key,
     required this.imageUrl,
-    required this.imageHeight,
-    required this.imageWidth,
+    this.imageHeight,
+    this.imageWidth,
     this.errorWidget,
     this.fit,
   });
@@ -21,8 +21,8 @@ class DefaultCachedNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      width: imageWidth,
-      height: imageHeight,
+      width: imageWidth ?? null,
+      height: imageHeight ?? null,
       imageUrl: imageUrl,
       placeholder: (context, url) => Shimmer.fromColors(
         baseColor: Colors.grey[900]!,

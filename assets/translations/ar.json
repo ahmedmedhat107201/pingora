@@ -259,5 +259,17 @@
   "exit_app_title": "إغلاق التطبيق",
   "exit_app_message": "هل أنت متأكد من أنك تريد إغلاق التطبيق؟",
   "ok": "حسناً",
-  "hello": "مرحباً"
+  "hello": "مرحباً",
+  "now": "الآن",
+  "tomorrow": "غداً",
+  "time_ago_minutes": "منذ {minutes} دقيقة",
+  "time_ago_hours": "منذ {hours} ساعة",
+  "time_ago_days": "منذ {days} يوم",
+  "day_sunday": "الأحد",
+  "day_monday": "الإثنين",
+  "day_tuesday": "الثلاثاء",
+  "day_wednesday": "الأربعاء",
+  "day_thursday": "الخميس",
+  "day_friday": "الجمعة",
+  "day_saturday": "السبت"
 }

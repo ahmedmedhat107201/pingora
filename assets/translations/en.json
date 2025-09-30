@@ -259,5 +259,17 @@
   "exit_app_title": "Exit App",
   "exit_app_message": "Are you sure you want to exit the app?",
   "ok": "OK",
-  "hello": "Hello"
+  "hello": "Hello",
+  "now": "Now",
+  "tomorrow": "Tomorrow",
+  "time_ago_minutes": "{minutes} minutes ago",
+  "time_ago_hours": "{hours} hours ago",
+  "time_ago_days": "{days} days ago",
+  "day_sunday": "Sunday",
+  "day_monday": "Monday",
+  "day_tuesday": "Tuesday",
+  "day_wednesday": "Wednesday",
+  "day_thursday": "Thursday",
+  "day_friday": "Friday",
+  "day_saturday": "Saturday"
 }

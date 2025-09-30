@@ -22,7 +22,7 @@ Future main() async {
       supportedLocales: const [Locale("ar"), Locale("en")],
       saveLocale: true,
       path: 'assets/translations',
-      startLocale: const Locale("ar"),
+      startLocale: const Locale("en"),
       child: MyApp(),
     ),
   );
