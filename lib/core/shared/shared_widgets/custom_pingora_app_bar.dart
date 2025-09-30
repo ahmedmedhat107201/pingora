@@ -68,9 +68,9 @@ class CustomPingoraAppBar extends StatelessWidget
                           children: [
                             GestureDetector(
                               child: Icon(
-                                Icons.arrow_back,
+                                Icons.arrow_back_ios,
                                 color: Colors.white,
-                                size: 24.sp,
+                                size: 20.sp,
                               ),
                               onTap: () {
                                 Navigator.of(context).pop();
@@ -81,26 +81,20 @@ class CustomPingoraAppBar extends StatelessWidget
                         ),
 
                       // User Avatar with Glow Effect
-                      Container(
-                        width: 50.w,
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withValues(alpha: 0.3),
-                              Colors.white.withValues(alpha: 0.1),
-                            ],
-                          ),
-                        ),
-                        child: DefaultCachedNetworkImage(
-                          imageUrl: userImageUrl!,
-                          imageHeight: 24.h,
-                          imageWidth: 24.w,
-                          errorWidget: Icon(
-                            Icons.person,
-                            size: 24.sp,
-                            color: context.primaryColor,
+                      CircleAvatar(
+                        radius: 25.r,
+                        backgroundColor: Colors.grey[300],
+                        child: ClipOval(
+                          child: DefaultCachedNetworkImage(
+                            imageUrl: userImageUrl!,
+                            imageHeight: 50.h,
+                            imageWidth: 50.w,
+                            fit: BoxFit.cover,
+                            errorWidget: Icon(
+                              Icons.person,
+                              size: 24.sp,
+                              color: context.primaryColor,
+                            ),
                           ),
                         ),
                       ),

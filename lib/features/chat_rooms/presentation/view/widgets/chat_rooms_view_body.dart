@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_tab_bar.dart';
 import 'package:pingora/core/utils/helper/date_time_format.dart';
+import 'package:pingora/core/utils/router/router_helper.dart';
+import 'package:pingora/features/chat_rooms/presentation/view/chat_room_view.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/widgets/chat_rooms_tile.dart';
 
 class ChatRoomsViewBody extends StatefulWidget {
@@ -38,6 +40,7 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
           },
         ),
 
+        SizedBox(height: 8.h),
         // TabBarView
         Expanded(
           child: TabBarView(
@@ -65,14 +68,23 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
         },
         itemBuilder: (context, index) {
           return ChatRoomsTile(
-            name: 'Ahmed Medhat',
+            name: 'Emma Stone',
             image:
-                'https://scontent.fcai20-2.fna.fbcdn.net/v/t39.30808-6/360096021_2195519360784561_7327906850771618380_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wlBJoKNDzqgQ7kNvwHIjTDo&_nc_oc=AdkJkoX_hCdYcC_09UzDItHH_TO-Mg4cT5RlJVvX-a6FE0yN9nbjtp1t8DDLU6zd_Tw&_nc_zt=23&_nc_ht=scontent.fcai20-2.fna&_nc_gid=_4WotFg7cBJAA1q0chl2tg&oh=00_AfYmxDgKiJF1SZwBBbdMP0_ja8q-h_3sEh2TbpzIMtLHfw&oe=68E16C84',
+                'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
             lastMessage: 'Hey! How are you?',
             time: DateTimeFormat.fromTimeFormat(
               DateTime.now().subtract(Duration(minutes: 120)).toString(),
             ),
             unreadCount: 3,
+            onTap: () {
+              MagicRouter.navigateTo(
+                ChatRoomView(
+                  userName: 'Emma Stone',
+                  userImage:
+                      'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
+                ),
+              );
+            },
           );
         },
         itemCount: 10,
@@ -90,11 +102,20 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
         },
         itemBuilder: (context, index) {
           return ChatRoomsTile(
-            name: 'Flutter Developers',
+            name: 'Emma Stone',
             image:
-                'https://scontent.fcai20-2.fna.fbcdn.net/v/t39.30808-6/360096021_2195519360784561_7327906850771618380_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wlBJoKNDzqgQ7kNvwHIjTDo&_nc_oc=AdkJkoX_hCdYcC_09UzDItHH_TO-Mg4cT5RlJVvX-a6FE0yN9nbjtp1t8DDLU6zd_Tw&_nc_zt=23&_nc_ht=scontent.fcai20-2.fna&_nc_gid=_4WotFg7cBJAA1q0chl2tg&oh=00_AfYmxDgKiJF1SZwBBbdMP0_ja8q-h_3sEh2TbpzIMtLHfw&oe=68E16C84',
+                'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
             lastMessage: 'John: Thanks for sharing!',
             time: '1:45 PM',
+            onTap: () {
+              MagicRouter.navigateTo(
+                ChatRoomView(
+                  userName: 'Emma Stone',
+                  userImage:
+                      'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
+                ),
+              );
+            },
           );
         },
         itemCount: 5,
