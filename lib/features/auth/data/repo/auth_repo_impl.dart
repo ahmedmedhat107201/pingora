@@ -82,13 +82,17 @@ class AuthRepoImpl implements AuthRepo {
       log('logout error: $e');
       if (e is DioException) {
         log('error response: ${e.response?.data}');
-        
+
         // If it's a 404 or similar server error, still allow logout locally
         if (e.response?.statusCode == 404 || e.response?.statusCode == 500) {
-          log('Server logout endpoint not available, proceeding with local logout');
-          return Right(true); // Allow local logout even if server endpoint is missing
+          log(
+            'Server logout endpoint not available, proceeding with local logout',
+          );
+          return Right(
+            true,
+          ); // Allow local logout even if server endpoint is missing
         }
-        
+
         return Left(ServerFailure.fromDioError(e));
       }
       return Left(
