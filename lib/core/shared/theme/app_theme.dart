@@ -71,6 +71,7 @@ extension AppThemeExtension on BuildContext {
 
   Color get primaryTextColor => AppColors.primaryTextColor(isDarkMode);
   Color get secondaryTextColor => AppColors.secondaryTextColor(isDarkMode);
+  Color get defaultTextColor => AppColors.defaultTextColor(isDarkMode);
   Color get backgroundColor => AppColors.backgroundColor(isDarkMode);
   Color get surfaceColor => AppColors.surfaceColor(isDarkMode);
   Color get subtitleColor => AppColors.subtitleColor(isDarkMode);

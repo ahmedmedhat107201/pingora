@@ -47,6 +47,9 @@ class AppColors {
   static Color secondaryTextColor(bool isDark) =>
       isDark ? darkSecondaryText : lightSecondaryText;
 
+  static Color defaultTextColor(bool isDark) =>
+      isDark ? Colors.black : Colors.white;
+
   static Color subtitleColor(bool isDark) =>
       isDark ? darkSubtitle : lightSubtitle;
 
