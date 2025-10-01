@@ -59,6 +59,7 @@ class CustomPingoraAppBar extends StatelessWidget
               Expanded(
                 child: GestureDetector(
                   onTap: onUserTap,
+
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

@@ -31,7 +31,6 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required String confirmPassword,
     required String username,
-    required String phone,
   }) async {
     try {
       emit(SignUpLoading());
@@ -40,7 +39,6 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
         confirmPassword: confirmPassword,
         username: username,
-        phone: phone,
       );
       result.fold(
         (failure) {

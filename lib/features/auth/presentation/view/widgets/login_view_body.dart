@@ -50,7 +50,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           toast(text: 'login failed', color: Colors.red);
         }
         if (state is LoginSuccess) {
-          toast(text: 'login success', color: context.primaryColor);
+          toast(text: 'login success', color: context.secondaryColor);
+          MagicRouter.navigateAndPopAll(ChatRoomsView());
         }
       },
       child: Container(
@@ -152,18 +153,26 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   SizedBox(height: 30.h),
 
                   // Login Button
-                  DefaultButton(
-                    // onPress: _handleLogin,
-                    onPress: () {
-                      MagicRouter.navigateTo(ChatRoomsView());
+                  BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, state) {
+                      return DefaultButton(
+                        onPress: state is LoginLoading
+                            ? null
+                            : () {
+                                _handleLogin();
+                              },
+                        text: state is LoginLoading
+                            ? 'loading'.tr()
+                            : 'login'.tr(),
+                        backgroundColor: context.primaryColor,
+                        textColor: Colors.white,
+                        borderRadius: 12.r,
+                        height: 20.h,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        shadowColor: Colors.black45,
+                      );
                     },
-                    text: 'login'.tr(),
-                    backgroundColor: context.primaryColor,
-                    textColor: Colors.white,
-                    borderRadius: 12.r,
-                    height: 20.h,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
                   ),
 
                   SizedBox(height: 30.h),

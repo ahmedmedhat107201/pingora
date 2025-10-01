@@ -191,6 +191,7 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
                         borderRadius: 12.r,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
+                        width: 0.w,
                         height: 16.h,
                         hasBorder: true,
                         borderColor: Colors.grey[300],
@@ -206,8 +207,9 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
                             widget.okButtonColor ??
                             AppColors.primarySwatchColor,
                         textColor: widget.okTextColor ?? Colors.white,
+                        width: 0.w,
                         borderRadius: 12.r,
-                        fontSize: 16.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         height: 16.h,
                       ),

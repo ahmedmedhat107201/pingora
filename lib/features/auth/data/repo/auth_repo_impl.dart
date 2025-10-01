@@ -21,10 +21,10 @@ class AuthRepoImpl implements AuthRepo {
       var response = await apiService.postData(
         endPoint: EndPoints.login,
         data: {"email": email, "password": password},
-        sendToken: true,
+        sendToken: false,
       );
 
-      return Right(response.data['data']['accessToken']);
+      return Right(response.data['data']['token']);
     } catch (e) {
       log('login up error: $e');
       if (e is DioException) {
@@ -43,7 +43,6 @@ class AuthRepoImpl implements AuthRepo {
     required String password,
     required String confirmPassword,
     required String username,
-    required String phone,
   }) async {
     try {
       final response = await apiService.postData(
@@ -51,14 +50,13 @@ class AuthRepoImpl implements AuthRepo {
         data: {
           "email": email,
           "password": password,
-          "confirmPassword": confirmPassword,
-          "username": username,
-          "phone": phone,
+          "password_confirmation": confirmPassword,
+          "name": username,
         },
-        sendToken: true,
+        sendToken: false,
       );
 
-      return Right(response.data['data']['accessToken']);
+      return Right(response.data['data']['token']);
     } catch (e) {
       log('sign up error: $e');
       if (e is DioException) {
@@ -79,11 +77,18 @@ class AuthRepoImpl implements AuthRepo {
         sendToken: true,
       );
 
-      return Right(response.data['success']);
+      return Right(response.statusCode == 200);
     } catch (e) {
       log('logout error: $e');
       if (e is DioException) {
-        log('error response: ${e.response!.data}');
+        log('error response: ${e.response?.data}');
+        
+        // If it's a 404 or similar server error, still allow logout locally
+        if (e.response?.statusCode == 404 || e.response?.statusCode == 500) {
+          log('Server logout endpoint not available, proceeding with local logout');
+          return Right(true); // Allow local logout even if server endpoint is missing
+        }
+        
         return Left(ServerFailure.fromDioError(e));
       }
       return Left(

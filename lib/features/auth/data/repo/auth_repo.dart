@@ -12,7 +12,6 @@ abstract class AuthRepo {
     required String password,
     required String confirmPassword,
     required String username,
-    required String phone,
   });
 
   Future<Either<Failure, bool>> logout();

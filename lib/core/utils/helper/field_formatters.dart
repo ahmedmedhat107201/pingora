@@ -20,4 +20,14 @@ class FieldFormatters {
     }
     return null;
   }
+
+  static String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'name_required'.tr();
+    }
+    if (value.length < 2) {
+      return 'name_min_length'.tr();
+    }
+    return null;
+  }
 }
