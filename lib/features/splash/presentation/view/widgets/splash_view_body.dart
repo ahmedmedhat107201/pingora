@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pingora/core/utils/router/router_helper.dart';
 import 'package:pingora/core/utils/services/local_services/cache_keys.dart';
 import 'package:pingora/features/auth/presentation/view/login_view.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/chat_rooms_view.dart';
+import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 import '../../../../../core/shared/theme/app_theme.dart';
 import '../../../../../core/utils/assets/assets.dart';
 import '../../../../../core/utils/text_styles/styles.dart';
@@ -21,15 +23,45 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   void initState() {
     super.initState();
 
-    setUpSplash();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setUpSplash();
+    });
   }
 
   setUpSplash() async {
-    await Future.delayed(const Duration(seconds: 3));
+    // Wait for the widget tree to be fully built before navigation
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (!mounted) return;
+
     if (CacheKeysManger.getAccessToken() != '') {
-      MagicRouter.navigateAndPopAll(ChatRoomsView());
+      final cubit = context.read<ProfileCubit>();
+
+      await cubit.getMe();
+
+      if (!mounted) return;
+
+      if (cubit.state is GetMeSuccess) {
+        if (mounted) {
+          MagicRouter.navigateAndPopAll(ChatRoomsView());
+        }
+        return;
+      } else if (cubit.state is GetMeFailure) {
+        CacheKeysManger.saveAccessTokenToCache('');
+        if (mounted) {
+          MagicRouter.navigateAndPopAll(LoginView());
+        }
+        return;
+      }
+    } else {
+      MagicRouter.navigateAndPopAll(LoginView());
+      return;
     }
-    MagicRouter.navigateAndPopAll(LoginView());
+
+    if (mounted) {
+      MagicRouter.navigateAndPopAll(LoginView());
+      return;
+    }
   }
 
   @override

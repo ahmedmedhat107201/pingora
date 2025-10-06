@@ -265,7 +265,7 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
 
       // Close dialog after successful operation
       if (mounted) {
-        Navigator.of(context).pop(true);
+        MagicRouter.pop();
       }
     } catch (e) {
       // Reset loading state on error

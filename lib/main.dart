@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/features/auth/data/repo/auth_repo.dart';
 import 'package:pingora/features/auth/presentation/view_model/auth_cubit.dart';
+import 'package:pingora/features/profile/data/repo/profile_repo.dart';
+import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:pingora/features/splash/presentation/view/splash_view.dart';
 import 'core/utils/router/router_helper.dart';
 import 'core/utils/services/local_services/cache_helper.dart';
@@ -45,6 +47,9 @@ class MyApp extends StatelessWidget {
             BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
             BlocProvider<AuthCubit>(
               create: (context) => AuthCubit(getIt<AuthRepo>()),
+            ),
+            BlocProvider<ProfileCubit>(
+              create: (context) => ProfileCubit(getIt<ProfileRepo>()),
             ),
           ],
           child: BlocBuilder<ThemeCubit, ThemeState>(

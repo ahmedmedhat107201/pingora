@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_dialog.dart';
+import 'package:pingora/core/utils/router/router_helper.dart';
 
 Future<bool?> showExitConfirmationDialog(BuildContext context) async {
   return await CustomDialog.show(
@@ -12,10 +13,10 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
     showCancelButton: true,
     canPop: true,
     onOkPressed: () {
-      Navigator.of(context).pop(true); // Return true to confirm exit
+      MagicRouter.pop(); // Return true to confirm exit
     },
     onCancelPressed: () {
-      Navigator.of(context).pop(false); // Return false to cancel exit
+      MagicRouter.pop(); // Return false to cancel exit
     },
   );
 }

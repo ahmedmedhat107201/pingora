@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pingora/features/auth/data/repo/auth_repo.dart';
 import 'package:pingora/features/auth/data/repo/auth_repo_impl.dart';
+import 'package:pingora/features/profile/data/repo/profile_repo.dart';
+import 'package:pingora/features/profile/data/repo/profile_repo_impl.dart';
 
 import '../../../../features/splash/data/repo/splash_repo.dart';
 import '../../../../features/splash/data/repo/splash_repo_impl.dart';
@@ -22,4 +24,5 @@ void setup() {
 
   getIt.registerSingleton<SplashRepo>(SplashRepoImpl(api));
   getIt.registerSingleton<AuthRepo>(AuthRepoImpl(api));
+  getIt.registerSingleton<ProfileRepo>(ProfileRepoImpl(api));
 }

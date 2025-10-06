@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/default_cached_network_image.dart';
 import 'package:pingora/core/shared/theme/app_theme.dart';
 import 'package:pingora/core/shared/shared_widgets/main_text.dart';
+import 'package:pingora/core/utils/router/router_helper.dart';
+import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 
 class CustomPingoraAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  final String userName;
-  final String? userImageUrl;
   final VoidCallback? onUserTap;
   final double? height;
   final bool showShadow;
@@ -17,8 +18,6 @@ class CustomPingoraAppBar extends StatelessWidget
 
   const CustomPingoraAppBar({
     Key? key,
-    required this.userName,
-    this.userImageUrl,
     this.onUserTap,
     this.height,
     this.showShadow = true,
@@ -74,7 +73,7 @@ class CustomPingoraAppBar extends StatelessWidget
                                 size: 20.sp,
                               ),
                               onTap: () {
-                                Navigator.of(context).pop();
+                                MagicRouter.pop();
                               },
                             ),
                             SizedBox(width: 12.w),
@@ -87,7 +86,11 @@ class CustomPingoraAppBar extends StatelessWidget
                         backgroundColor: Colors.grey[300],
                         child: ClipOval(
                           child: DefaultCachedNetworkImage(
-                            imageUrl: userImageUrl!,
+                            imageUrl: context
+                                .read<ProfileCubit>()
+                                .getMeModel!
+                                .user!
+                                .profileImageUrl!,
                             imageHeight: 50.h,
                             imageWidth: 50.w,
                             fit: BoxFit.cover,
@@ -118,7 +121,11 @@ class CustomPingoraAppBar extends StatelessWidget
                             SizedBox(height: 2.h),
                             // User Name
                             MainText(
-                              userName,
+                              context
+                                  .read<ProfileCubit>()
+                                  .getMeModel!
+                                  .user!
+                                  .name!,
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,

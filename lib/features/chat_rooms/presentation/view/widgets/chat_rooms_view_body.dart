@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_tab_bar.dart';
 import 'package:pingora/core/utils/helper/date_time_format.dart';
 import 'package:pingora/core/utils/router/router_helper.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/chat_room_view.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/widgets/chat_rooms_tile.dart';
+import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 
 class ChatRoomsViewBody extends StatefulWidget {
   const ChatRoomsViewBody({super.key});
@@ -24,37 +28,71 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
     tabController.addListener(() {
       setState(() {});
     });
+
+    context.read<ProfileCubit>().getMe();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Reusable Custom TabBar
-        CustomTabBar(
-          tabController: tabController,
-          tabTitles: ['Messages', 'Groups'],
-          onTap: (index) {
-            // Handle tab tap if needed
-            print('Tab $index tapped');
-          },
-        ),
-
-        SizedBox(height: 8.h),
-        // TabBarView
-        Expanded(
-          child: TabBarView(
-            controller: tabController,
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is GetMeLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is GetMeFailure) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Messages Tab
-              _buildMessagesTab(),
-              // Groups Tab
-              _buildGroupsTab(),
+              Center(child: Text('Error: ${state.errorMessage}')),
+              SizedBox(height: 16.h),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<ProfileCubit>().getMe();
+                },
+                child: const Text('Retry'),
+              ),
             ],
-          ),
-        ),
-        SizedBox(height: 24.h),
-      ],
+          );
+        }
+        return Column(
+          children: [
+            // Reusable Custom TabBar
+            CustomTabBar(
+              tabController: tabController,
+              tabTitles: ['Messages', 'Groups'],
+              onTap: (index) {
+                // Handle tab tap if needed
+                print('Tab $index tapped');
+              },
+            ),
+
+            SizedBox(height: 8.h),
+            // TabBarView
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  // Messages Tab
+                  RefreshIndicator(
+                    child: _buildMessagesTab(),
+                    onRefresh: () async {
+                      await context.read<ProfileCubit>().getMe();
+                    },
+                  ),
+                  // Groups Tab
+                  RefreshIndicator(
+                    child: _buildGroupsTab(),
+                    onRefresh: () async {
+                      await context.read<ProfileCubit>().getMe();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 24.h),
+          ],
+        );
+      },
     );
   }
 
@@ -77,6 +115,13 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
             ),
             unreadCount: 3,
             onTap: () {
+              final me = context.read<ProfileCubit>().getMeModel!.user!;
+
+              log(me.id!.toString());
+              log(me.name!);
+              log(me.email!);
+              log(me.profileImageUrl!);
+
               MagicRouter.navigateTo(
                 ChatRoomView(
                   userName: 'Emma Stone',
