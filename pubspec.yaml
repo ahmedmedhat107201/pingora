@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
   url_launcher: ^6.3.2
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   change_app_package_name: ^1.4.0

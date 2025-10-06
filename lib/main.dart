@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/features/auth/data/repo/auth_repo.dart';
 import 'package:pingora/features/auth/presentation/view_model/auth_cubit.dart';
+import 'package:pingora/features/chat_room/data/repo/chat_room_repo.dart';
+import 'package:pingora/features/chat_room/presentation/view_model/chat_room_cubit.dart';
+import 'package:pingora/features/chat_rooms/data/repo/chat_rooms_repo.dart';
+import 'package:pingora/features/chat_rooms/presentation/view_model/chat_rooms_cubit.dart';
 import 'package:pingora/features/profile/data/repo/profile_repo.dart';
 import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:pingora/features/splash/presentation/view/splash_view.dart';
@@ -50,6 +54,12 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<ProfileCubit>(
               create: (context) => ProfileCubit(getIt<ProfileRepo>()),
+            ),
+            BlocProvider<ChatRoomCubit>(
+              create: (context) => ChatRoomCubit(getIt<ChatRoomRepo>()),
+            ),
+            BlocProvider<ChatRoomsCubit>(
+              create: (context) => ChatRoomsCubit(getIt<ChatRoomsRepo>()),
             ),
           ],
           child: BlocBuilder<ThemeCubit, ThemeState>(

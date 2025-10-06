@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/toast.dart';
 import 'package:pingora/core/shared/theme/app_theme.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_pingora_app_bar.dart';
@@ -9,6 +10,7 @@ import 'package:pingora/core/utils/router/router_helper.dart';
 import 'package:pingora/features/auth/presentation/view_model/auth_cubit.dart';
 import 'package:pingora/features/auth/presentation/view/login_view.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/widgets/chat_rooms_view_body.dart';
+import 'package:pingora/features/users/presentation/view/users_view.dart';
 
 class ChatRoomsView extends StatelessWidget {
   const ChatRoomsView({super.key});
@@ -67,6 +69,18 @@ class ChatRoomsView extends StatelessWidget {
                     },
             ),
             body: ChatRoomsViewBody(),
+
+            floatingActionButton: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: FloatingActionButton(
+                // tooltip: 'create_chat_room'.tr(),
+                onPressed: () {
+                  MagicRouter.navigateTo(UsersView());
+                },
+                backgroundColor: context.primaryColor,
+                child: Icon(Icons.chat, color: Colors.white, size: 24.sp),
+              ),
+            ),
           );
         },
       ),

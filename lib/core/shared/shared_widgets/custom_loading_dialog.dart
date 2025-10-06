@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_button.dart';
+import 'package:pingora/core/shared/shared_widgets/custom_loading_indicator.dart';
 import 'package:pingora/core/shared/shared_widgets/main_text.dart';
 import 'package:pingora/core/shared/theme/app_theme.dart';
 import 'package:pingora/core/utils/colors/colors.dart';
@@ -145,26 +146,12 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
               // Loading Section (shown when loading)
               if (_isLoading) ...[
                 widget.loadingWidget ??
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 20.w,
-                          height: 20.h,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              context.primaryColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        MainText(
-                          widget.loadingMessage ?? 'Please wait...',
-                          fontSize: 14.sp,
-                          color: context.primaryColor,
-                        ),
-                      ],
+                    CustomLoadingWidgetIndicator.overlay(
+                      type: LoadingType.pulse,
+                      size: 24.w,
+                      color: context.primaryColor,
+                      message: widget.loadingMessage ?? 'Please wait...',
+                      messageSpacing: 12.h,
                     ),
                 SizedBox(height: 24.h),
               ],
