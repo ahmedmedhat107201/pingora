@@ -12,6 +12,7 @@ abstract class AuthRepo {
     required String password,
     required String confirmPassword,
     required String username,
+    String? profileImage,
   });
 
   Future<Either<Failure, bool>> logout();

@@ -48,6 +48,8 @@
   "logout_confirm_message": "Are you sure you want to logout?",
   "logging_out_please_wait": "Logging out, please wait...",
   "error": "Error",
+  "add_photo": "Add Photo",
+  "failed_to_pick_image": "Failed to pick image",
   "retry": "Retry",
   "trip_details": "Trip Details",
   "trip_published": "Trip published, waiting for users",

@@ -24,10 +24,11 @@ class AuthRepoImpl implements AuthRepo {
         sendToken: false,
       );
 
-      return Right(response.data['data']['token']);
+      return Right(response.data['data']['access_token']);
     } catch (e) {
       log('login up error: $e');
       if (e is DioException) {
+        e.response?.statusMessage;
         log('error response: ${e.response!.data}');
         return Left(ServerFailure.fromDioError(e));
       }
@@ -43,20 +44,27 @@ class AuthRepoImpl implements AuthRepo {
     required String password,
     required String confirmPassword,
     required String username,
+    String? profileImage,
   }) async {
     try {
-      final response = await apiService.postData(
+      final response = await apiService.postDataWithImage(
         endPoint: EndPoints.signUp,
-        data: {
+        data: FormData.fromMap({
           "email": email,
           "password": password,
           "password_confirmation": confirmPassword,
           "name": username,
-        },
-        sendToken: false,
+          if (profileImage != null)
+            "profile_image": await MultipartFile.fromFile(
+              profileImage,
+              contentType: DioMediaType.parse('image/png'),
+            ),
+        }, ListFormat.multiCompatible),
+        sendAuthToken: true,
+        query: {},
       );
 
-      return Right(response.data['data']['token']);
+      return Right(response.data['data']['access_token']);
     } catch (e) {
       log('sign up error: $e');
       if (e is DioException) {

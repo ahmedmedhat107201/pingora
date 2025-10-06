@@ -1,9 +1,12 @@
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pingora/core/shared/shared_widgets/toast.dart';
 import 'package:pingora/core/utils/helper/field_formatters.dart';
+import 'package:pingora/core/utils/helper/custom_image_picker.dart';
 import 'package:pingora/core/utils/router/router_helper.dart';
 import 'package:pingora/features/auth/presentation/view/login_view.dart';
 import 'package:pingora/features/auth/presentation/view_model/auth_cubit.dart';
@@ -29,6 +32,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _acceptTerms = false;
+  String? _selectedImagePath;
 
   @override
   void dispose() {
@@ -40,6 +44,20 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     super.dispose();
   }
 
+  Future<void> _pickProfileImage() async {
+    try {
+      final imagePath = await CustomImagePicker.pickImageFromGallery();
+      if (imagePath != null) {
+        setState(() {
+          _selectedImagePath = imagePath;
+          log('Picked image path: $_selectedImagePath');
+        });
+      }
+    } catch (e) {
+      toast(text: 'failed_to_pick_image'.tr(), color: Colors.red);
+    }
+  }
+
   Future<void> _handleSignUp() async {
     if (_formKey.currentState?.validate() ?? false) {
       await context.read<AuthCubit>().signUp(
@@ -47,6 +65,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
         password: _passwordController.text.trim(),
         confirmPassword: _confirmPasswordController.text.trim(),
         username: _fullNameController.text.trim(),
+        profileImage: _selectedImagePath,
       );
     }
   }
@@ -86,11 +105,11 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                   // App Logo
                   Image.asset(
                     AssetData.appLogo,
-                    height: 120.h,
+                    height: 100.h,
                     fit: BoxFit.contain,
                   ),
 
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 12.h),
 
                   // Welcome Text
                   MainText(
@@ -112,6 +131,61 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                   ),
 
                   SizedBox(height: 30.h),
+
+                  // Profile Image Picker
+                  Center(
+                    child: GestureDetector(
+                      onTap: _pickProfileImage,
+                      child: Container(
+                        width: 100.w,
+                        height: 100.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: context.inputBackgroundColor,
+                          border: Border.all(
+                            color: context.borderColor,
+                            width: 2.w,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 8.r,
+                              offset: Offset(0, 2.h),
+                            ),
+                          ],
+                        ),
+                        child: _selectedImagePath != null
+                            ? ClipOval(
+                                child: Image.file(
+                                  File(_selectedImagePath!),
+                                  fit: BoxFit.cover,
+                                  width: 100.w,
+                                  height: 100.h,
+                                ),
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add_a_photo_outlined,
+                                    size: 32.sp,
+                                    color: context.greyColor,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  MainText(
+                                    'add_photo'.tr(),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: context.greyColor,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 20.h),
 
                   // Full Name Field
                   DefaultTextFormField(
