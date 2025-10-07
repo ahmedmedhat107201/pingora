@@ -18,7 +18,7 @@ enum LoadingType {
   rotatingCircle,
 }
 
-class CustomLoadingWidgetIndicator extends StatelessWidget {
+class CustomLoadingIndicator extends StatelessWidget {
   final LoadingType type;
   final Color? color;
   final double? size;
@@ -27,7 +27,7 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
   final TextStyle? messageStyle;
   final EdgeInsetsGeometry? padding;
 
-  CustomLoadingWidgetIndicator({
+  CustomLoadingIndicator({
     super.key,
     this.type = LoadingType.circular,
     this.color,
@@ -38,7 +38,7 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
     this.padding,
   });
 
-  factory CustomLoadingWidgetIndicator.standard({
+  factory CustomLoadingIndicator.standard({
     LoadingType? type,
     Color? color,
     double? size,
@@ -47,7 +47,7 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
     TextStyle? messageStyle,
     EdgeInsetsGeometry? padding,
   }) {
-    return CustomLoadingWidgetIndicator(
+    return CustomLoadingIndicator(
       type: type ?? LoadingType.wanderingCubes,
       color: color,
       size: size ?? 60,

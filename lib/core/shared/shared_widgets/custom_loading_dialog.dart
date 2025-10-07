@@ -145,7 +145,7 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
 
               // Loading Section (shown when loading)
               if (_isLoading) ...[
-                widget.loadingWidget ?? CustomLoadingWidgetIndicator.standard(),
+                widget.loadingWidget ?? CustomLoadingIndicator.standard(),
                 SizedBox(height: 24.h),
               ],
 

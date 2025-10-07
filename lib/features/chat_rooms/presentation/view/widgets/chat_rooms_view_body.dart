@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/core/shared/shared_widgets/custom_loading_indicator.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_tab_bar.dart';
 import 'package:pingora/core/utils/helper/date_time_format.dart';
 import 'package:pingora/core/utils/router/router_helper.dart';
@@ -37,7 +38,7 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state is GetMeLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return CustomLoadingIndicator.standard();
         } else if (state is GetMeFailure) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,

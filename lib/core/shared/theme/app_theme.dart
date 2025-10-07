@@ -9,6 +9,13 @@ class AppTheme {
   // Create ThemeData for light mode
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        refreshBackgroundColor: context.backgroundColor,
+      ),
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: AppColors.primaryColor,
+        brightness: Brightness.light,
+      ),
       fontFamily: context.locale.languageCode == 'ar' ? 'Cairo' : 'Roboto',
       brightness: Brightness.light,
       primarySwatch: AppColors.primaryColor,
@@ -38,6 +45,15 @@ class AppTheme {
   // Create ThemeData for dark mode
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        refreshBackgroundColor: context.backgroundColor,
+      ),
+
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: AppColors.primaryColor,
+        brightness: Brightness.dark,
+      ),
+
       fontFamily: context.locale.languageCode == 'ar' ? 'Cairo' : 'Roboto',
       brightness: Brightness.dark,
       primarySwatch: AppColors.primaryColor,
