@@ -29,7 +29,7 @@ class CustomPingoraAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is GetMeLoading || state is GetMeFailure) {
+        if (state is GetMeLoading || state is GetMeError) {
           return Container(
             height: preferredSize.height,
             decoration: BoxDecoration(

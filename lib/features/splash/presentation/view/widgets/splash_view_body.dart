@@ -46,7 +46,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
           MagicRouter.navigateAndPopAll(ChatRoomsView());
         }
         return;
-      } else if (cubit.state is GetMeFailure) {
+      } else if (cubit.state is GetMeError) {
         CacheKeysManger.saveAccessTokenToCache('');
         if (mounted) {
           MagicRouter.navigateAndPopAll(LoginView());

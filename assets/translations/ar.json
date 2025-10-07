@@ -50,7 +50,7 @@
   "error": "خطأ",
   "add_photo": "إضافة صورة",
   "failed_to_pick_image": "فشل في اختيار الصورة",
-  "retry": "Retry",
+  "retry": "إعادة المحاولة",
   "trip_details": "تفاصيل الرحلة",
   "trip_published": "تم نشر الرحلة، في انتظار المستخدمين",
   "follow_trip": "متابعة الرحلة",
@@ -279,5 +279,6 @@
   "day_wednesday": "الأربعاء",
   "day_thursday": "الخميس",
   "day_friday": "الجمعة",
-  "day_saturday": "السبت"
+  "day_saturday": "السبت",
+  "start_new_chat": "ابدأ محادثة جديدة"
 }

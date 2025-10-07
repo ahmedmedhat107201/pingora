@@ -5,11 +5,11 @@ import 'package:pingora/core/shared/theme/app_theme.dart';
 class EmptyWidget extends StatelessWidget {
   const EmptyWidget({
     super.key,
-    required this.image,
+    this.image,
     required this.title,
     required this.description,
   });
-  final String image;
+  final String? image;
   final String title;
   final String description;
   @override
@@ -20,7 +20,12 @@ class EmptyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: AppConstants.height30(context) * 2),
-            Image.asset(image, width: MediaQuery.of(context).size.width * .62),
+            image != null
+                ? Image.asset(
+                    image!,
+                    width: MediaQuery.of(context).size.width * .62,
+                  )
+                : const SizedBox.shrink(),
             SizedBox(height: AppConstants.height30(context)),
             Text(
               title,

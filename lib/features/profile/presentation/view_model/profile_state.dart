@@ -12,7 +12,7 @@ final class GetMeSuccess extends ProfileState {
   GetMeSuccess(this.getMeModel);
 }
 
-final class GetMeFailure extends ProfileState {
+final class GetMeError extends ProfileState {
   final String errorMessage;
-  GetMeFailure(this.errorMessage);
+  GetMeError(this.errorMessage);
 }

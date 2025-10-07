@@ -14,7 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
       final result = await authRepo.login(email: email, password: password);
       result.fold(
         (failure) {
-          emit(LoginFailure(failure.errMessage));
+          emit(LoginError(failure.errMessage));
         },
         (token) {
           CacheKeysManger.saveAccessTokenToCache(token);
@@ -22,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
     } catch (e) {
-      emit(LoginFailure(e.toString()));
+      emit(LoginError(e.toString()));
     }
   }
 
@@ -44,7 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
       result.fold(
         (failure) {
-          emit(SignUpFailure(failure.errMessage));
+          emit(SignUpError(failure.errMessage));
         },
         (token) {
           CacheKeysManger.saveAccessTokenToCache(token);
@@ -52,7 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
     } catch (e) {
-      emit(SignUpFailure(e.toString()));
+      emit(SignUpError(e.toString()));
     }
   }
 
@@ -64,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       result.fold(
         (failure) {
-          emit(LogoutFailure(failure.errMessage));
+          emit(LogoutError(failure.errMessage));
         },
         (success) {
           CacheKeysManger.saveAccessTokenToCache('');
@@ -72,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
     } catch (e) {
-      emit(LogoutFailure(e.toString()));
+      emit(LogoutError(e.toString()));
     }
   }
 }

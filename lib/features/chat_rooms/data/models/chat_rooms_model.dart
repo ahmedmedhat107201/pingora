@@ -1,13 +1,13 @@
 import 'package:pingora/core/shared/shared_models/meta_model.dart';
 import 'package:pingora/core/shared/shared_models/room_model.dart';
 
-class GetRoomsModel {
+class ChatRoomsModel {
   final Rooms? rooms;
 
-  const GetRoomsModel({this.rooms});
+  const ChatRoomsModel({this.rooms});
 
-  factory GetRoomsModel.fromJson(Map<String, dynamic> json) {
-    return GetRoomsModel(rooms: Rooms.fromJson(json['rooms'] ?? {}));
+  factory ChatRoomsModel.fromJson(Map<String, dynamic> json) {
+    return ChatRoomsModel(rooms: Rooms.fromJson(json['rooms'] ?? {}));
   }
 
   Map<String, dynamic> toJson() {

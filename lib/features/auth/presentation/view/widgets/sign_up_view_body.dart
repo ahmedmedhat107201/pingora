@@ -74,7 +74,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is SignUpFailure) {
+        if (state is SignUpError) {
           toast(text: 'sign up failed', color: Colors.red);
         }
         if (state is SignUpSuccess) {

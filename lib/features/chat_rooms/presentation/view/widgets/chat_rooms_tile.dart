@@ -3,12 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pingora/core/shared/shared_widgets/default_cached_network_image.dart';
 import 'package:pingora/core/shared/shared_widgets/main_text.dart';
 import 'package:pingora/core/shared/theme/app_theme.dart';
+import 'package:pingora/core/utils/colors/colors.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   final String image;
   final String name;
   final String lastMessage;
-  final String time;
+  final String? time;
   final int? unreadCount;
   final VoidCallback? onTap;
 
@@ -16,7 +17,7 @@ class ChatRoomsTile extends StatelessWidget {
     required this.image,
     required this.name,
     required this.lastMessage,
-    required this.time,
+    this.time,
     this.unreadCount,
     this.onTap,
   });
@@ -67,11 +68,11 @@ class ChatRoomsTile extends StatelessWidget {
                       height: 48.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.primaryColor.withValues(alpha: 0.7),
                       ),
                       child: Icon(
                         Icons.person,
-                        size: 24.sp,
+                        size: 20.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -114,14 +115,15 @@ class ChatRoomsTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MainText(
-                    time,
-                    fontSize: 12.sp,
-                    color: context.secondaryColor,
-                    fontWeight: FontWeight.w500,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                  ),
+                  if (time != null)
+                    MainText(
+                      time,
+                      fontSize: 12.sp,
+                      color: context.secondaryColor,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                    ),
                   SizedBox(height: 4.h),
                   // Unread message indicator
                   if (unreadCount != null && unreadCount! > 0)

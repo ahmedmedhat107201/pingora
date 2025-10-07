@@ -91,7 +91,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           child: CircleAvatar(
                             radius: 24.r,
                             backgroundColor: Colors.white.withValues(
-                              alpha: 0.3,
+                              alpha: 0.8,
                             ),
                             child: ClipOval(
                               child: DefaultCachedNetworkImage(
@@ -104,12 +104,11 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   height: 48.h,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.white.withValues(alpha: 0.2),
                                   ),
                                   child: Icon(
                                     Icons.person,
-                                    size: 20.sp,
-                                    color: Colors.white,
+                                    size: 24.sp,
+                                    color: context.primaryColor,
                                   ),
                                 ),
                               ),

@@ -1,5 +1,5 @@
 class EndPoints {
-  static const baseUrl = 'https://bc63685a060d.ngrok-free.app/api/v1/';
+  static const baseUrl = 'https://fe76859f44e6.ngrok-free.app/api/v1/';
 
   // auth endpoints
   static const login = 'auth/login';
@@ -15,6 +15,7 @@ class EndPoints {
   // chat rooms endpoints
   static const getChatRooms = "chat/rooms";
   static const createPrivateRoom = "chat/rooms/private";
+  static const createGroupRoom = "chat/rooms/group";
 
   // chat room endpoints
   static const sendMessage = "chat/messages";

@@ -47,7 +47,7 @@ class ChatRoomsView extends StatelessWidget {
           toast(text: 'logout successfully', color: context.secondaryColor);
 
           MagicRouter.navigateAndPopAll(LoginView());
-        } else if (state is LogoutFailure) {
+        } else if (state is LogoutError) {
           // Close loading dialog if open
           if (MagicRouter.canPop) {
             MagicRouter.pop();
@@ -73,10 +73,10 @@ class ChatRoomsView extends StatelessWidget {
             floatingActionButton: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
               child: FloatingActionButton(
-                // tooltip: 'create_chat_room'.tr(),
                 onPressed: () {
                   MagicRouter.navigateTo(UsersView());
                 },
+                tooltip: 'start_new_chat'.tr(),
                 backgroundColor: context.primaryColor,
                 child: Icon(Icons.chat, color: Colors.white, size: 24.sp),
               ),

@@ -46,7 +46,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is LoginFailure) {
+        if (state is LoginError) {
           toast(text: 'login failed', color: Colors.red);
         }
         if (state is LoginSuccess) {

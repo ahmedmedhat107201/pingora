@@ -19,7 +19,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       result.fold(
         (failure) {
           CacheKeysManger.saveAccessTokenToCache('');
-          emit(GetMeFailure(failure.errMessage));
+          emit(GetMeError(failure.errMessage));
         },
         (getMeModel) {
           this.getMeModel = getMeModel;
@@ -27,7 +27,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         },
       );
     } catch (e) {
-      emit(GetMeFailure(e.toString()));
+      emit(GetMeError(e.toString()));
     }
   }
 }

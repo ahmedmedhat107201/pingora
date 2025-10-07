@@ -1,14 +1,19 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/core/shared/shared_widgets/custom_error_state.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_loading_indicator.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_tab_bar.dart';
+import 'package:pingora/core/shared/shared_widgets/empty_widget.dart';
+import 'package:pingora/core/shared/shared_widgets/main_text.dart';
 import 'package:pingora/core/utils/helper/date_time_format.dart';
 import 'package:pingora/core/utils/router/router_helper.dart';
-import 'package:pingora/features/chat_rooms/presentation/view/chat_room_view.dart';
+import 'package:pingora/features/chat_room/presentation/view/chat_room_view.dart';
 import 'package:pingora/features/chat_rooms/presentation/view/widgets/chat_rooms_tile.dart';
+import 'package:pingora/features/chat_rooms/presentation/view_model/chat_rooms_cubit.dart';
 import 'package:pingora/features/profile/presentation/view_model/profile_cubit.dart';
 
 class ChatRoomsViewBody extends StatefulWidget {
@@ -31,6 +36,7 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
     });
 
     context.read<ProfileCubit>().getMe();
+    context.read<ChatRoomsCubit>().getChatRooms();
   }
 
   @override
@@ -39,21 +45,8 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
       builder: (context, state) {
         if (state is GetMeLoading) {
           return CustomLoadingIndicator.standard();
-        } else if (state is GetMeFailure) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(child: Text('Error: ${state.errorMessage}')),
-              SizedBox(height: 16.h),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<ProfileCubit>().getMe();
-                },
-                child: const Text('Retry'),
-              ),
-            ],
-          );
+        } else if (state is GetMeError) {
+          return CustomErrorState(errorMessage: state.errorMessage);
         }
         return Column(
           children: [
@@ -61,9 +54,12 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
             CustomTabBar(
               tabController: tabController,
               tabTitles: ['Messages', 'Groups'],
-              onTap: (index) {
-                // Handle tab tap if needed
-                print('Tab $index tapped');
+              onTap: (index) async {
+                if (index == 0) {
+                  await context.read<ChatRoomsCubit>().getChatRooms();
+                } else if (index == 1) {
+                  log('group tabbed');
+                }
               },
             ),
 
@@ -77,7 +73,7 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
                   RefreshIndicator(
                     child: _buildMessagesTab(),
                     onRefresh: () async {
-                      await context.read<ProfileCubit>().getMe();
+                      await context.read<ChatRoomsCubit>().getChatRooms();
                     },
                   ),
                   // Groups Tab
@@ -99,42 +95,68 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
 
   // Messages Tab Content
   Widget _buildMessagesTab() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: ListView.separated(
-        separatorBuilder: (context, index) {
-          return SizedBox(height: 8.h);
-        },
-        itemBuilder: (context, index) {
-          return ChatRoomsTile(
-            name: 'Emma Stone',
-            image:
-                'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
-            lastMessage: 'Hey! How are you?',
-            time: DateTimeFormat.fromTimeFormat(
-              DateTime.now().subtract(Duration(minutes: 120)).toString(),
-            ),
-            unreadCount: 3,
-            onTap: () {
-              final me = context.read<ProfileCubit>().getMeModel!.user!;
-
-              log(me.id!.toString());
-              log(me.name!);
-              log(me.email!);
-              log(me.profileImageUrl!);
-
-              MagicRouter.navigateTo(
-                ChatRoomView(
-                  userName: 'Emma Stone',
-                  userImage:
-                      'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
-                ),
-              );
+    return BlocBuilder<ChatRoomsCubit, ChatRoomsState>(
+      builder: (context, state) {
+        if (state is GetChatRoomsLoading) {
+          return CustomLoadingIndicator.standard();
+        } else if (state is GetChatRoomsError) {
+          return CustomErrorState(
+            errorMessage: state.errorMessage,
+            onRetry: () async {
+              await context.read<ChatRoomsCubit>().getChatRooms();
             },
           );
-        },
-        itemCount: 10,
-      ),
+        } else {
+          final rooms = context
+              .read<ChatRoomsCubit>()
+              .chatRoomsModel!
+              .rooms!
+              .data!;
+
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: ListView.separated(
+              itemCount: rooms.length,
+
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 8.h);
+              },
+              itemBuilder: (context, index) {
+                if (rooms.isEmpty) {
+                  return EmptyWidget(
+                    title: 'no rooms now',
+                    description: 'you need to start a chat',
+                  );
+                }
+
+                final room = rooms[index];
+
+                return ChatRoomsTile(
+                  name: room.displayName!,
+                  image: room.coverImageUrl!,
+                  lastMessage: room.lastMessage == null
+                      ? 'start_new_chat'.tr()
+                      : room.lastMessage!.content!,
+                  time: room.lastMessage == null
+                      ? null
+                      : DateTimeFormat.fromTimeFormat(
+                          room.lastMessage!.createdAt!,
+                        ),
+                  onTap: () {
+                    MagicRouter.navigateTo(
+                      ChatRoomView(
+                        roomId: room.id!,
+                        userName: room.displayName!,
+                        userImage: room.coverImageUrl!,
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -147,24 +169,15 @@ class _ChatRoomsViewBodyState extends State<ChatRoomsViewBody>
           return SizedBox(height: 8.h);
         },
         itemBuilder: (context, index) {
-          return ChatRoomsTile(
-            name: 'Emma Stone',
-            image:
-                'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
-            lastMessage: 'John: Thanks for sharing!',
-            time: '1:45 PM',
-            onTap: () {
-              MagicRouter.navigateTo(
-                ChatRoomView(
-                  userName: 'Emma Stone',
-                  userImage:
-                      'https://www.thedailybeast.com/resizer/v2/2SDWTBRDEVLHBKBMUFHETDWIRY.jpg?smart=true&auth=fac58285da0f39cc8d1086baa9e6261a8b74412c9b5e7503be36feaa56414d56&width=1200&height=675',
-                ),
-              );
-            },
+          return Center(
+            child: MainText(
+              'Groups feature coming soon!',
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w500,
+            ),
           );
         },
-        itemCount: 5,
+        itemCount: 1,
       ),
     );
   }

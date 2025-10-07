@@ -1,12 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/core/shared/shared_widgets/custom_error_state.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_loading_indicator.dart';
-import 'package:pingora/core/shared/shared_widgets/default_cached_network_image.dart';
 import 'package:pingora/core/shared/shared_widgets/search_widget.dart';
-import 'package:pingora/core/utils/colors/colors.dart';
+import 'package:pingora/core/shared/shared_widgets/toast.dart';
+import 'package:pingora/core/utils/router/router_helper.dart';
+import 'package:pingora/features/chat_room/presentation/view/chat_room_view.dart';
+import 'package:pingora/features/chat_rooms/presentation/view_model/chat_rooms_cubit.dart';
+import 'package:pingora/features/users/presentation/view/widgets/user_tile.dart';
 import 'package:pingora/features/users/presentation/view_model/users_cubit.dart';
 
 class UsersViewBody extends StatefulWidget {
@@ -32,19 +34,11 @@ class _UsersViewBodyState extends State<UsersViewBody> {
         if (state is GetAllUsersLoading) {
           return CustomLoadingIndicator.standard();
         } else if (state is GetAllUsersError) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(child: Text('Error: ${state.errorMessage}')),
-              SizedBox(height: 16.h),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<UsersCubit>().getAllUsers();
-                },
-                child: const Text('Retry'),
-              ),
-            ],
+          return CustomErrorState(
+            errorMessage: state.errorMessage,
+            onRetry: () async {
+              await context.read<UsersCubit>().getAllUsers();
+            },
           );
         }
         return Container(
@@ -62,32 +56,60 @@ class _UsersViewBodyState extends State<UsersViewBody> {
 
                 //users list
                 Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 12.h);
+                  child: BlocListener<ChatRoomsCubit, ChatRoomsState>(
+                    listener: (context, state) {
+                      if (state is CreatePrivateRoomLoading) {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              CreationLoadingDialog(canPop: true),
+                        );
+                      } else if (state is CreatePrivateRoomError) {
+                        MagicRouter.pop();
+                        toast(text: state.errorMessage, color: Colors.red);
+                      } else {
+                        final room = context
+                            .read<ChatRoomsCubit>()
+                            .createdRoom!;
+                        MagicRouter.pop();
+                        MagicRouter.navigateTo(
+                          ChatRoomView(
+                            roomId: room.id!,
+                            userName: room.displayName!,
+                            userImage: room.coverImageUrl!,
+                          ),
+                        );
+                      }
                     },
-                    itemCount: context
-                        .read<UsersCubit>()
-                        .getUsersModel!
-                        .users!
-                        .data!
-                        .length,
-                    itemBuilder: (context, index) {
-                      final user = context
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 12.h);
+                      },
+                      itemCount: context
                           .read<UsersCubit>()
                           .getUsersModel!
                           .users!
-                          .data![index];
+                          .data!
+                          .length,
+                      itemBuilder: (context, index) {
+                        final user = context
+                            .read<UsersCubit>()
+                            .getUsersModel!
+                            .users!
+                            .data![index];
 
-                      return UserTile(
-                        userName: user.name,
-                        email: user.email,
-                        userImageUrl: user.profileImageUrl,
-                        onTap: () {
-                          log('Tapped on ${user.id}');
-                        },
-                      );
-                    },
+                        return UserTile(
+                          userName: user.name,
+                          email: user.email,
+                          userImageUrl: user.profileImageUrl,
+                          onTap: () async {
+                            await context
+                                .read<ChatRoomsCubit>()
+                                .createPrivateRoom(userId: user.id!);
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -99,115 +121,33 @@ class _UsersViewBodyState extends State<UsersViewBody> {
   }
 }
 
-class UserTile extends StatelessWidget {
-  final String? userName;
-  final String? email;
-  final String? userImageUrl;
-  final VoidCallback? onTap;
-
-  const UserTile({
-    super.key,
-    this.userName,
-    this.email,
-    this.userImageUrl,
-    this.onTap,
-  });
+class CreationLoadingDialog extends StatelessWidget {
+  final bool canPop;
+  CreationLoadingDialog({super.key, this.canPop = true});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8.r,
-            offset: Offset(0, 2.h),
-          ),
-        ],
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.1),
-          width: 1.w,
-        ),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12.r),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Profile Image
-            CircleAvatar(
-              radius: 24.r,
-              backgroundColor: Colors.white.withValues(alpha: 0.3),
-              child: ClipOval(
-                child: DefaultCachedNetworkImage(
-                  imageUrl: userImageUrl! + 'sss',
-                  imageWidth: 48.w,
-                  imageHeight: 48.h,
-                  fit: BoxFit.cover,
-                  errorWidget: Container(
-                    width: 48.w,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryColor.withValues(alpha: 0.7),
-                    ),
-                    child: Icon(Icons.person, size: 20.sp, color: Colors.white),
-                  ),
+    return PopScope(
+      canPop: this.canPop,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: EdgeInsets.all(30.r),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Center(
+                child: CustomLoadingIndicator.standard(
+                  type: LoadingType.wanderingCubes,
                 ),
               ),
             ),
-
-            SizedBox(width: 12.w),
-
-            // User Name
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    userName ?? 'Unknown User',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    email ?? 'user@email.com',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 12.w),
-            // Chat Icon
-            Container(
-              width: 40.w,
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: AppColors.secondaryColor.withValues(alpha: 0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.chat,
-                size: 18.sp,
-                color: AppColors.secondaryColor,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
