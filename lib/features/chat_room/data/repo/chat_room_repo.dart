@@ -6,4 +6,9 @@ abstract class ChatRoomRepo {
   Future<Either<Failure, GetRoomMessagesModel>> getChatMessages({
     required int roomId,
   });
+
+  Future<Either<Failure, int>> sendMessage({
+    required int roomId,
+    required String message,
+  });
 }

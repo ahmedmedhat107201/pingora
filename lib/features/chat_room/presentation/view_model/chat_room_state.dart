@@ -16,3 +16,15 @@ final class GetChatMessagesError extends ChatRoomState {
   final String errorMessage;
   GetChatMessagesError(this.errorMessage);
 }
+
+final class SendMessageLoading extends ChatRoomState {}
+
+final class SendMessageSuccess extends ChatRoomState {
+  final int statusCode;
+  SendMessageSuccess(this.statusCode);
+}
+
+final class SendMessageError extends ChatRoomState {
+  final String errorMessage;
+  SendMessageError(this.errorMessage);
+}

@@ -23,32 +23,6 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
   late TextEditingController _messageController;
   late ScrollController _scrollController;
 
-  // void addMessage(String message, bool isMe) {
-  //   setState(() {
-  //     messages.insert(
-  //       0,
-  //       MessageModel(
-  //         message: message,
-  //         isMe: isMe,
-  //         time: DateTime.now().toString(),
-  //         isSeen: false,
-  //       ),
-  //     );
-  //     _scrollController.animateTo(
-  //       0.0,
-  //       duration: Duration(milliseconds: 500),
-  //       curve: Curves.easeOut,
-  //     );
-  //   });
-  // }
-
-  // void _sendMessage() {
-  //   if (_messageController.text.trim().isNotEmpty) {
-  //     addMessage(_messageController.text.trim(), true);
-  //     _messageController.clear();
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -117,6 +91,8 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                 // Input Area
                 DefaultTextFormField(
                   controller: _messageController,
+                  maxLines: 1,
+                  textInputAction: TextInputAction.send,
                   textInputType: TextInputType.text,
                   hintText: 'type_message'.tr(),
                   suffixIcon: Padding(
@@ -130,8 +106,23 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                           color: Colors.white,
                           size: 20.sp,
                         ),
-                        // onPressed: _sendMessage,
-                        onPressed: () {},
+                        onPressed: state is SendMessageLoading
+                            ? null
+                            : () {
+                                if (_messageController.text.trim().isNotEmpty) {
+                                  context.read<ChatRoomCubit>().sendMessage(
+                                    roomId: widget.roomId,
+                                    message: _messageController.text.trim(),
+                                  );
+                                  _messageController.clear();
+                                  // Scroll to bottom after sending message
+                                  _scrollController.animateTo(
+                                    0.0,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeOut,
+                                  );
+                                }
+                              },
                       ),
                     ),
                   ),
@@ -141,11 +132,8 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                   labelColorActive: context.primaryColor,
                   borderRadius: 20.r,
                   isFilled: true,
-                  textInputAction: TextInputAction.send,
                   contentPaddingVertical: 24.h,
                   contentPaddingHorizontal: 16.w,
-                  // onFilledSubmit: (_) => _sendMessage(),
-                  onFilledSubmit: (_) => () {},
                 ),
               ],
             ),

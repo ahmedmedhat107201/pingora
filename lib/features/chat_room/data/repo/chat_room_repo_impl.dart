@@ -34,4 +34,31 @@ class ChatRoomRepoImpl implements ChatRoomRepo {
       );
     }
   }
+
+  Future<Either<Failure, int>> sendMessage({
+    required int roomId,
+    required String message,
+  }) async {
+    try {
+      var response = await apiService.postDataWithImage(
+        endPoint: EndPoints.sendMessage,
+        data: FormData.fromMap({
+          "room_id": roomId,
+          "message": message,
+        }, ListFormat.multiCompatible),
+        sendAuthToken: true,
+        query: {},
+      );
+
+      return Right(response.statusCode ?? 200);
+    } catch (e) {
+      if (e is DioException) {
+        log('error response: ${e.response!.data}');
+        return Left(ServerFailure.fromDioError(e));
+      }
+      return Left(
+        ServerFailure('An unexpected error occurred. Please try again.'),
+      );
+    }
+  }
 }

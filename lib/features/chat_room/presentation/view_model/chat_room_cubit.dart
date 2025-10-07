@@ -24,6 +24,32 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           emit(GetChatMessagesSuccess(getMessagesModel));
         },
       );
-    } catch (e) {}
+    } catch (e) {
+      emit(GetChatMessagesError(e.toString()));
+    }
+  }
+
+  Future<void> sendMessage({
+    required int roomId,
+    required String message,
+  }) async {
+    try {
+      emit(SendMessageLoading());
+      var result = await chatRoomRepo.sendMessage(
+        roomId: roomId,
+        message: message,
+      );
+      result.fold(
+        (failure) {
+          emit(SendMessageError(failure.errMessage));
+        },
+        (statusCode) {
+          emit(SendMessageSuccess(statusCode));
+          // getChatMessages(roomId: roomId);
+        },
+      );
+    } catch (e) {
+      emit(SendMessageError(e.toString()));
+    }
   }
 }
