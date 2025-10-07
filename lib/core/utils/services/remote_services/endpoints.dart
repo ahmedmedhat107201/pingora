@@ -1,5 +1,5 @@
 class EndPoints {
-  static const baseUrl = 'https://475f88cdf4a0.ngrok-free.app/api/v1/';
+  static const baseUrl = 'https://4c72789f6d19.ngrok-free.app/api/v1/';
 
   // auth endpoints
   static const login = 'auth/login';

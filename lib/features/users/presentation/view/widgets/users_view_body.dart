@@ -20,16 +20,13 @@ class _UsersViewBodyState extends State<UsersViewBody> {
   }
 
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsersCubit, UsersState>(
       builder: (context, state) {
         if (state is GetAllUsersLoading) {
-          return CustomLoadingWidgetIndicator.overlay(
-            type: LoadingType.wanderingCubes,
-            size: 80.h,
-            message: 'Loading users...',
-          );
+          return CustomLoadingWidgetIndicator.standard();
         } else if (state is GetAllUsersError) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,

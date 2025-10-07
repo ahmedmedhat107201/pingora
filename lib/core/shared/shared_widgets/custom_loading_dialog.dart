@@ -145,14 +145,7 @@ class _CustomLoadingDialogState extends State<CustomLoadingDialog> {
 
               // Loading Section (shown when loading)
               if (_isLoading) ...[
-                widget.loadingWidget ??
-                    CustomLoadingWidgetIndicator.overlay(
-                      type: LoadingType.pulse,
-                      size: 24.w,
-                      color: context.primaryColor,
-                      message: widget.loadingMessage ?? 'Please wait...',
-                      messageSpacing: 12.h,
-                    ),
+                widget.loadingWidget ?? CustomLoadingWidgetIndicator.standard(),
                 SizedBox(height: 24.h),
               ],
 

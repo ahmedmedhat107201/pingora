@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -24,9 +25,6 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
   final String? message;
   final double? messageSpacing;
   final TextStyle? messageStyle;
-  final bool showBackground;
-  final Color? backgroundColor;
-  final double backgroundOpacity;
   final EdgeInsetsGeometry? padding;
 
   CustomLoadingWidgetIndicator({
@@ -37,26 +35,28 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
     this.message,
     this.messageSpacing,
     this.messageStyle,
-    this.showBackground = false,
-    this.backgroundColor,
-    this.backgroundOpacity = 0.3,
     this.padding,
   });
 
-  /// Full screen loading overlay
-  CustomLoadingWidgetIndicator.overlay({
-    super.key,
-    this.type = LoadingType.fadingCircle,
-    this.color,
-    this.size = 50,
-    this.message,
-    this.messageSpacing = 32,
-    this.messageStyle,
-    this.showBackground = true,
-    this.backgroundColor,
-    this.backgroundOpacity = 0.8,
-    this.padding,
-  });
+  factory CustomLoadingWidgetIndicator.standard({
+    LoadingType? type,
+    Color? color,
+    double? size,
+    String? message,
+    double? messageSpacing,
+    TextStyle? messageStyle,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return CustomLoadingWidgetIndicator(
+      type: type ?? LoadingType.wanderingCubes,
+      color: color,
+      size: size ?? 60,
+      message: message ?? 'loading'.tr(),
+      messageSpacing: messageSpacing ?? 16,
+      messageStyle: messageStyle,
+      padding: padding,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,20 +87,6 @@ class CustomLoadingWidgetIndicator extends StatelessWidget {
     // Add padding if provided
     if (padding != null) {
       loadingWidget = Padding(padding: padding!, child: loadingWidget);
-    }
-
-    // Add background container if needed
-    if (showBackground) {
-      loadingWidget = Container(
-        decoration: BoxDecoration(
-          color: (backgroundColor ?? Colors.white).withValues(
-            alpha: backgroundOpacity,
-          ),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        padding: EdgeInsets.all(20.r),
-        child: loadingWidget,
-      );
     }
 
     return Center(child: loadingWidget);

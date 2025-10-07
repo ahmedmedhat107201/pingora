@@ -27,125 +27,154 @@ class CustomPingoraAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: preferredSize.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            context.primaryColor,
-            context.primaryColor.withValues(alpha: 0.8),
-            context.secondaryColor.withValues(alpha: 0.6),
-          ],
-        ),
-        boxShadow: showShadow
-            ? [
-                BoxShadow(
-                  color: context.primaryColor.withValues(alpha: 0.3),
-                  blurRadius: 10.r,
-                  offset: Offset(0, 4.h),
-                ),
-              ]
-            : null,
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-          child: Row(
-            children: [
-              // User Profile Section
-              Expanded(
-                child: GestureDetector(
-                  onTap: onUserTap,
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        if (state is GetMeLoading || state is GetMeFailure) {
+          return Container(
+            height: preferredSize.height,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  context.primaryColor,
+                  context.primaryColor.withValues(alpha: 0.8),
+                  context.secondaryColor.withValues(alpha: 0.6),
+                ],
+              ),
+              boxShadow: showShadow
+                  ? [
+                      BoxShadow(
+                        color: context.primaryColor.withValues(alpha: 0.3),
+                        blurRadius: 10.r,
+                        offset: Offset(0, 4.h),
+                      ),
+                    ]
+                  : null,
+            ),
+          );
+        }
+        return Container(
+          height: preferredSize.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                context.primaryColor,
+                context.primaryColor.withValues(alpha: 0.8),
+                context.secondaryColor.withValues(alpha: 0.6),
+              ],
+            ),
+            boxShadow: showShadow
+                ? [
+                    BoxShadow(
+                      color: context.primaryColor.withValues(alpha: 0.3),
+                      blurRadius: 10.r,
+                      offset: Offset(0, 4.h),
+                    ),
+                  ]
+                : null,
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+              child: Row(
+                children: [
+                  // User Profile Section
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: onUserTap,
 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      if (hasBackButton)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
-                                size: 20.sp,
-                              ),
-                              onTap: () {
-                                MagicRouter.pop();
-                              },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          if (hasBackButton)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                    size: 20.sp,
+                                  ),
+                                  onTap: () {
+                                    MagicRouter.pop();
+                                  },
+                                ),
+                                SizedBox(width: 12.w),
+                              ],
                             ),
-                            SizedBox(width: 12.w),
-                          ],
-                        ),
 
-                      // User Avatar with Glow Effect
-                      CircleAvatar(
-                        radius: 25.r,
-                        backgroundColor: Colors.grey[300],
-                        child: ClipOval(
-                          child: DefaultCachedNetworkImage(
-                            imageUrl: context
-                                .read<ProfileCubit>()
-                                .getMeModel!
-                                .user!
-                                .profileImageUrl!,
-                            imageHeight: 50.h,
-                            imageWidth: 50.w,
-                            fit: BoxFit.cover,
-                            errorWidget: Icon(
-                              Icons.person,
-                              size: 24.sp,
-                              color: context.primaryColor,
+                          // User Avatar with Glow Effect
+                          CircleAvatar(
+                            radius: 25.r,
+                            backgroundColor: Colors.grey[300],
+                            child: ClipOval(
+                              child: DefaultCachedNetworkImage(
+                                imageUrl: context
+                                    .read<ProfileCubit>()
+                                    .getMeModel!
+                                    .user!
+                                    .profileImageUrl!,
+                                imageHeight: 50.h,
+                                imageWidth: 50.w,
+                                fit: BoxFit.cover,
+                                errorWidget: Icon(
+                                  Icons.person,
+                                  size: 24.sp,
+                                  color: context.primaryColor,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
 
-                      SizedBox(width: 16.w),
+                          SizedBox(width: 16.w),
 
-                      // User Info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Greeting Text
-                            MainText(
-                              'hello'.tr(),
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white.withValues(alpha: 0.9),
+                          // User Info
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Greeting Text
+                                MainText(
+                                  'hello'.tr(),
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                ),
+                                SizedBox(height: 2.h),
+                                // User Name
+                                MainText(
+                                  context
+                                      .read<ProfileCubit>()
+                                      .getMeModel!
+                                      .user!
+                                      .name!,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 2.h),
-                            // User Name
-                            MainText(
-                              context
-                                  .read<ProfileCubit>()
-                                  .getMeModel!
-                                  .user!
-                                  .name!,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
 
-              // Actions
-              if (actions != null) ...actions!,
-            ],
+                  // Actions
+                  if (actions != null) ...actions!,
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
