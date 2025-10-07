@@ -99,7 +99,9 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CircleAvatar(
                       radius: 20.r,
-                      backgroundColor: context.primaryColor,
+                      backgroundColor: state is SendMessageLoading
+                          ? context.greyColor
+                          : context.primaryColor,
                       child: IconButton(
                         icon: Icon(
                           Icons.send,
@@ -108,12 +110,14 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                         ),
                         onPressed: state is SendMessageLoading
                             ? null
-                            : () {
+                            : () async {
                                 if (_messageController.text.trim().isNotEmpty) {
-                                  context.read<ChatRoomCubit>().sendMessage(
-                                    roomId: widget.roomId,
-                                    message: _messageController.text.trim(),
-                                  );
+                                  await context
+                                      .read<ChatRoomCubit>()
+                                      .sendMessage(
+                                        roomId: widget.roomId,
+                                        message: _messageController.text.trim(),
+                                      );
                                   _messageController.clear();
                                   // Scroll to bottom after sending message
                                   _scrollController.animateTo(
