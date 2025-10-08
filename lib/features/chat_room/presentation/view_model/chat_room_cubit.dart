@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:pingora/core/shared/shared_models/message_model.dart';
 import 'package:pingora/features/chat_room/data/models/get_room_messages_models.dart';
 import 'package:pingora/features/chat_room/data/repo/chat_room_repo.dart';
 
@@ -50,6 +51,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       );
     } catch (e) {
       emit(SendMessageError(e.toString()));
+    }
+  }
+
+  void addMessage(MessageModel message) {
+    if (roomMessagesModel != null) {
+      roomMessagesModel!.messages!.data!.insert(0, message);
+      emit(GetChatMessagesSuccess(roomMessagesModel!));
     }
   }
 }

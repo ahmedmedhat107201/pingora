@@ -1,5 +1,6 @@
 class EndPoints {
-  static const baseUrl = 'https://fe76859f44e6.ngrok-free.app/api/v1/';
+  static const baseUrl = 'https://b4a52e0ff466.ngrok-free.app/api/v1/';
+  static const socketUrl = 'wss://7137d690fcda.ngrok-free.app';
 
   // auth endpoints
   static const login = 'auth/login';
@@ -20,4 +21,11 @@ class EndPoints {
   // chat room endpoints
   static const sendMessage = "chat/messages";
   static const getRoomMessages = "chat/messages";
+
+  //socket events
+  static const joinRoom = "join-room";
+  static const leaveRoom = "leave-room";
+
+  static const joinedRoom = "joined-room";
+  static const messageSent = "new-message";
 }

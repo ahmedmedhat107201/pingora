@@ -1,13 +1,18 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pingora/core/shared/shared_cubits/chat_socket_cubit/chat_socket_cubit.dart';
 import 'package:pingora/core/shared/shared_models/message_model.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_error_state.dart';
 import 'package:pingora/core/shared/shared_widgets/custom_loading_indicator.dart';
 import 'package:pingora/core/shared/shared_widgets/default_text_form_field.dart';
 import 'package:pingora/core/shared/shared_widgets/empty_widget.dart';
 import 'package:pingora/core/shared/theme/app_theme.dart';
+import 'package:pingora/core/utils/services/remote_services/endpoints.dart';
 import 'package:pingora/features/chat_room/presentation/view/widgets/chat_bubble.dart';
 import 'package:pingora/features/chat_room/presentation/view_model/chat_room_cubit.dart';
 
@@ -30,12 +35,57 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
     _scrollController = ScrollController();
 
     context.read<ChatRoomCubit>().getChatMessages(roomId: widget.roomId);
+
+    //socket setup
+
+    //join the room in the beginning
+    context.read<ChatSocketCubit>().emitToSocket(
+      data: {
+        "event": EndPoints.joinRoom,
+        "data": {"room_id": widget.roomId},
+      },
+    );
+
+    //listen to new messages
+    context.read<ChatSocketCubit>().listenToSocketEvent(
+      onSuccess: (data) {
+        data = jsonDecode(data.toString());
+
+        log('data printed' + data.toString());
+        //check if the event is message sent
+        if (data['event'] == EndPoints.messageSent) {
+          log('New message event received: ${data.toString()}');
+          final messageData = data['data'];
+          //extra check that this is the current room
+          if (messageData != null && messageData['room_id'] == widget.roomId) {
+            // Only add message if it belongs to the current room
+            final message = MessageModel.fromJson(messageData);
+
+            context.read<ChatRoomCubit>().addMessage(message);
+            // Scroll to bottom when a new message is added
+            _scrollController.animateTo(
+              0.0,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        }
+      },
+    );
   }
 
   @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+
+    //leave the room when disposing
+    context.read<ChatSocketCubit>().emitToSocket(
+      data: {
+        "event": EndPoints.leaveRoom,
+        "data": {"room_id": widget.roomId},
+      },
+    );
     super.dispose();
   }
 
