@@ -27,6 +27,7 @@ class ChatRoomViewBody extends StatefulWidget {
 class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
   late TextEditingController _messageController;
   late ScrollController _scrollController;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -62,10 +63,17 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
             final message = MessageModel.fromJson(messageData);
 
             context.read<ChatRoomCubit>().addMessage(message);
+
+            // Add to animated list at the beginning (since we're using reverse)
+            _listKey.currentState?.insertItem(
+              0,
+              duration: Duration(milliseconds: 300),
+            );
+
             // Scroll to bottom when a new message is added
             _scrollController.animateTo(
               0.0,
-              duration: Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 500),
               curve: Curves.easeOut,
             );
           }
@@ -117,22 +125,34 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                         ),
                       )
                     : Expanded(
-                        child: ListView.separated(
+                        child: AnimatedList(
+                          key: _listKey,
                           controller: _scrollController,
                           reverse: true, // Show latest messages at bottom
-                          separatorBuilder: (context, index) {
-                            return SizedBox(height: 12.h);
-                          },
-                          itemBuilder: (context, index) {
+                          initialItemCount: messages.length,
+                          itemBuilder: (context, index, animation) {
                             final message = messages[index];
-                            return ChatBubble(
-                              message: message.content!,
-                              isMe: message.isMine!,
-                              time: message.createdAt!,
-                              isSeen: false,
+                            return SizeTransition(
+                              sizeFactor: animation,
+                              child: SlideTransition(
+                                position: animation.drive(
+                                  Tween(
+                                    begin: Offset(0.0, 0.5),
+                                    end: Offset.zero,
+                                  ).chain(CurveTween(curve: Curves.easeOut)),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 12.h),
+                                  child: ChatBubble(
+                                    message: message.content!,
+                                    isMe: message.isMine!,
+                                    time: message.createdAt!,
+                                    isSeen: false,
+                                  ),
+                                ),
+                              ),
                             );
                           },
-                          itemCount: messages.length,
                         ),
                       ),
 
@@ -169,10 +189,14 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
                                         message: _messageController.text.trim(),
                                       );
                                   _messageController.clear();
+
+                                  // If message was sent successfully, it will be received via socket
+                                  // and added to the animated list automatically
+
                                   // Scroll to bottom after sending message
                                   _scrollController.animateTo(
                                     0.0,
-                                    duration: Duration(milliseconds: 300),
+                                    duration: Duration(milliseconds: 500),
                                     curve: Curves.easeOut,
                                   );
                                 }

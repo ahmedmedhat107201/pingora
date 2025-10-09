@@ -54,6 +54,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
+  //add the message into the messages list returned in the room
   void addMessage(MessageModel message) {
     if (roomMessagesModel != null) {
       roomMessagesModel!.messages!.data!.insert(0, message);
