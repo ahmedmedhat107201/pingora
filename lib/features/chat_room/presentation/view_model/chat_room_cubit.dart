@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:pingora/core/shared/shared_cubits/chat_socket_cubit/chat_socket_cubit.dart';
 import 'package:pingora/core/shared/shared_models/message_model.dart';
+import 'package:pingora/core/utils/services/remote_services/endpoints.dart';
 import 'package:pingora/features/chat_room/data/models/get_room_messages_models.dart';
 import 'package:pingora/features/chat_room/data/repo/chat_room_repo.dart';
 
@@ -60,5 +66,43 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       roomMessagesModel!.messages!.data!.insert(0, message);
       emit(GetChatMessagesSuccess(roomMessagesModel!));
     }
+  }
+
+  void joinChatRoom({required BuildContext context, required int roomId}) {
+    context.read<ChatSocketCubit>().emitToSocket(
+      data: {
+        "event": EndPoints.joinRoom,
+        "data": {"room_id": roomId},
+      },
+    );
+  }
+
+  void listenToMessages({
+    required BuildContext context,
+    required int roomId,
+    Function? onMessageReceived,
+  }) {
+    context.read<ChatSocketCubit>().listenToSocketEvent(
+      onSuccess: (data) {
+        log('data printed' + data.toString());
+        //check if the event is message sent
+        if (data['event'] == EndPoints.messageSent) {
+          log('New message event received: ${data.toString()}');
+          final messageData = data['data'];
+          //extra check that this is the current room
+          if (messageData != null && messageData['room_id'] == roomId) {
+            // Only add message if it belongs to the current room
+            final message = MessageModel.fromJson(messageData);
+
+            addMessage(message);
+
+            // callback to call in the ui when message received
+            if (onMessageReceived != null) {
+              onMessageReceived();
+            }
+          }
+        }
+      },
+    );
   }
 }

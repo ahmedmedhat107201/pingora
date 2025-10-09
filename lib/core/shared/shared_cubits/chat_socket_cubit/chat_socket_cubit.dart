@@ -24,10 +24,6 @@ class ChatSocketCubit extends Cubit<ChatSocketState> {
       wsUrl = Uri.parse(EndPoints.socketUrl);
 
       if (bearerToken.isNotEmpty) {
-        log(
-          'Socket connecting with bearer token: ${bearerToken.substring(0, 10)}...',
-        );
-
         // Create WebSocket with headers using IOWebSocketChannel
         channel = IOWebSocketChannel.connect(
           wsUrl!,
@@ -66,6 +62,7 @@ class ChatSocketCubit extends Cubit<ChatSocketState> {
         (data) {
           log('Socket received data: $data');
           // Call the callback function with received data
+          data = jsonDecode(data.toString());
           onSuccess(data);
         },
         onError: (error) {

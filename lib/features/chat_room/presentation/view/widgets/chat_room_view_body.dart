@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,44 +37,30 @@ class _ChatRoomViewBodyState extends State<ChatRoomViewBody> {
     //socket setup
 
     //join the room in the beginning
-    context.read<ChatSocketCubit>().emitToSocket(
-      data: {
-        "event": EndPoints.joinRoom,
-        "data": {"room_id": widget.roomId},
-      },
+    context.read<ChatRoomCubit>().joinChatRoom(
+      context: context,
+      roomId: widget.roomId,
     );
 
     //listen to new messages
-    context.read<ChatSocketCubit>().listenToSocketEvent(
-      onSuccess: (data) {
-        data = jsonDecode(data.toString());
 
-        log('data printed' + data.toString());
-        //check if the event is message sent
-        if (data['event'] == EndPoints.messageSent) {
-          log('New message event received: ${data.toString()}');
-          final messageData = data['data'];
-          //extra check that this is the current room
-          if (messageData != null && messageData['room_id'] == widget.roomId) {
-            // Only add message if it belongs to the current room
-            final message = MessageModel.fromJson(messageData);
+    context.read<ChatRoomCubit>().listenToMessages(
+      context: context,
+      roomId: widget.roomId,
 
-            context.read<ChatRoomCubit>().addMessage(message);
+      // Add to animated list at the beginning (since we're using reverse)
+      onMessageReceived: () {
+        _listKey.currentState?.insertItem(
+          0,
+          duration: Duration(milliseconds: 300),
+        );
 
-            // Add to animated list at the beginning (since we're using reverse)
-            _listKey.currentState?.insertItem(
-              0,
-              duration: Duration(milliseconds: 300),
-            );
-
-            // Scroll to bottom when a new message is added
-            _scrollController.animateTo(
-              0.0,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOut,
-            );
-          }
-        }
+        // Scroll to bottom when a new message is added
+        _scrollController.animateTo(
+          0.0,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
       },
     );
   }
